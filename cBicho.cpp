@@ -7,8 +7,6 @@ cBicho::cBicho(void)
 	seq=0;
 	delay=0;
 
-	jumping = false;
-
 	stopDown = false;
 	stopUp = false;
 }
