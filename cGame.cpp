@@ -30,6 +30,9 @@ bool cGame::Init()
 		//PlaySound();
 		res = Data.LoadImage(IMG_MENU_TITOL, "img/titolRtype.png", GL_RGBA);
 		if (!res) return false;
+
+		// LOADS
+
 		//glDisable(GL_NORMALIZE);
 		//glDisable(GL_LIGHTING);
 	}
@@ -54,9 +57,6 @@ bool cGame::Init()
 	//Player initialization
 	res = Data.LoadImage(IMG_PLAYER,"img/nau-alpha.png",GL_RGBA);
 	if(!res) return false;
-
-	
-
 
 	res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);
 	if(!res) return false;
@@ -86,9 +86,15 @@ bool cGame::Loop()
 {
 	bool res=true;
 
-	res = Process();
-	if(res) Render();
+	if(level == 0) res = ProcessMenu();
+	else res = Process();
 
+	if(res) {
+		if(level == 0) renderMenu();
+		//else if(level == 1) {}
+		//else if(level == 2) {}
+		Render();
+	}
 	return res;
 }
 
@@ -249,13 +255,15 @@ void cGame::renderMenu()
 	glBindTexture(GL_TEXTURE_2D, id);
 	glBegin(GL_QUADS);
 		
-	glTexCoord2f(0,1 );				glVertex2d(-1,-1);
-	glTexCoord2f(1,1);				glVertex2d(1,-1);
-	glTexCoord2f(1 ,0);					glVertex2d(1,1);
-	glTexCoord2f(0,0);					glVertex2d(-1,1);
+	glTexCoord2f(0,1 );				glVertex2d(-0.7,0.6);
+	glTexCoord2f(1,1);				glVertex2d(0.7,0.6);
+	glTexCoord2f(1 ,0);					glVertex2d(0.7,0.9);
+	glTexCoord2f(0,0);					glVertex2d(-0.7,0.9);
 
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+
+	glutSwapBuffers();
 }
 
 cPlayer cGame::getPlayer() {

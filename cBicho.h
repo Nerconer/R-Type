@@ -14,7 +14,7 @@
 #define STATE_WALKUP		2
 #define STATE_WALKDOWN		3
 
-#define VELOCITAT_PLAYER	2
+#define VELOCITAT_PLAYER	1
 
 class cRect
 {
