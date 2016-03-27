@@ -21,14 +21,13 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
-	int *GetMap();
-	vector<vector<int> > GetMap2();
+	int map[SCENE_WIDTH][SCENE_HEIGHT]; //scene
+	
 
 	void DrawBackground(int text_id);
 
 private:
-	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
-	vector<vector<int> > map2;
+	
 	int id_DL_background;								//actual level display list
 	int id_DL_level;
 

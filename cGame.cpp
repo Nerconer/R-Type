@@ -120,12 +120,12 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	Player.Advance();
+	//Player.Advance();
 
-	if(keys[GLUT_KEY_UP])			Player.MoveUp(Scene.GetMap());
-	else if(keys[GLUT_KEY_LEFT])	Player.MoveLeft(Scene.GetMap(), Scene.GetMap2());
-	else if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap(), Scene.GetMap2());
-	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(Scene.GetMap());
+	if (keys[GLUT_KEY_UP])			Player.MoveUp(Scene.map);
+	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(Scene.map);
+	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.map);
+	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(Scene.map);
 	else Player.Stop();
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {

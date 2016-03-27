@@ -3,6 +3,7 @@
 #include "cTexture.h"
 #include "Globals.h"
 #include "posTexture.h"
+#include "cScene.h"
 
 #define FRAME_DELAY		10
 #define STEP_LENGTH		4
@@ -38,15 +39,15 @@ public:
 	void GetWidthHeight(int *w,int *h);
 
 	bool Collides(cRect *rc);
-	bool CollidesMapWall(int *map,bool right, vector<vector<int> > map2);
-	bool CollidesMapFloor(int *map, bool up);
+	bool CollidesMapWall(int map[SCENE_WIDTH][SCENE_HEIGHT], bool right);
+	bool CollidesMapFloor(int map[SCENE_WIDTH][SCENE_HEIGHT], bool up);
 	void GetArea(cRect *rc);
-	void DrawRect(int tex_id,float xo,float yo,float xf,float yf);
+	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
 
-	void MoveRight(int *map, vector<vector<int> > map2);
-	void MoveLeft(int *map, vector<vector<int> > map2);
-	void MoveUp(int *map);
-	void MoveDown(int *map);
+	void MoveRight(int map[SCENE_WIDTH][SCENE_HEIGHT]);
+	void MoveLeft(int map[SCENE_WIDTH][SCENE_HEIGHT]);
+	void MoveUp(int map[SCENE_WIDTH][SCENE_HEIGHT]);
+	void MoveDown(int map[SCENE_WIDTH][SCENE_HEIGHT]);
 	void Stop();
 
 	virtual void Shoot();

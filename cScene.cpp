@@ -27,7 +27,7 @@ bool cScene::LoadLevel(int level)
 	cData cData;
 
 	cData.GetSize(IMG_TILES_001, &w, &h);
-	//map2 = vector<vector<int>>(SCENE_WIDTH*5, SCENE_HEIGHT*5); 
+	//map = new vector<vector<int>>(SCENE_WIDTH, SCENE_HEIGHT); 
 
 	cHelper cHelper;
 
@@ -48,7 +48,7 @@ bool cScene::LoadLevel(int level)
 			for(j=SCENE_HEIGHT-1;j>=0;j--)
 			{
 				vector<int> fila;
-				px=TILE_SIZE;
+				px=0;
 				py=(j*TILE_SIZE);
 
 				for(i=0;i<SCENE_WIDTH;i++)
@@ -77,10 +77,9 @@ bool cScene::LoadLevel(int level)
 						glTexCoord2f(coordx_tile + descx, coordy_tile);	glVertex2i(px + BLOCK_SIZE, py + BLOCK_SIZE);
 						glTexCoord2f(coordx_tile, coordy_tile);	glVertex2i(px, py + BLOCK_SIZE);
 					}
-					fila.push_back(tile);
+					map[i][j] = tile;
 					px+=TILE_SIZE;
 				}
-				map2.push_back(fila);
 			}
 
 		glEnd();
@@ -171,11 +170,4 @@ void cScene::DrawBackground(int tex_id)
 
 
 }
-int* cScene::GetMap()
-{
-	return map;
-}
 
-vector<vector<int> > cScene::GetMap2() {
-	return map2;
-}
