@@ -70,44 +70,51 @@ bool cBicho::CollidesMapWall(int map[SCENE_WIDTH][SCENE_HEIGHT], bool right)
 
 
 	if (right) {
-		if (map[tile_x + 1][tile_y] != 0) return true;
+		if (map[tile_x + width_tiles/2][tile_y + height_tiles] != 0) return true;
 	}
 	else {
 
-		if (map[tile_x + 1][tile_y] != 0) return true;
+		if (map[tile_x + width_tiles/2][tile_y + height_tiles] != 0) return true;
 	}
 	return false;
 }
 
 bool cBicho::CollidesMapFloor(int map[SCENE_WIDTH][SCENE_HEIGHT], bool up)
 {
-	int tile_x, tile_y, offset_x;
-	int width_tiles;
+	int tile_x, tile_y;
+	int width_tiles, height_tiles;
 	bool on_base;
 	int i;
 
-	tile_x = x / TILE_SIZE;
-	tile_y = (y / TILE_SIZE);
-	//if (!up) tile_y += 1;
-
-	width_tiles = w / TILE_SIZE;
+	tile_x = x / (TILE_SIZE);
+	tile_y = y / TILE_SIZE;
 
 
-//	tile_x += width_tiles + 2;
+	width_tiles = (w / TILE_SIZE)-1;
+	height_tiles = (h / TILE_SIZE)+1;
 
-
-
-	if (up) {
-		if (map[tile_x + width_tiles + 2][tile_y + 2] != 0) return true;
-		if (map[tile_x + 1][tile_y + 2] != 0) return true;
+	on_base = false;
+	i = 0;
+	int desc;
+	if (up) desc = height_tiles;
+	else desc = 0;
+	while ((i<width_tiles) && !on_base)
+	{
+		if ((y % TILE_SIZE) == 0)
+		{
+			if (map[(tile_x+i+width_tiles)][tile_y + desc] != 0)
+				on_base = true;
+		}
+		else
+		{
+			if (map[tile_x+i+width_tiles][tile_y] != 0)
+			{
+				on_base = true;
+			}
+		}
+		i++;
 	}
-	else {
-
-		if (map[tile_x + width_tiles + 2][tile_y + 1] != 0) return true;
-		if (map[tile_x + 1][tile_y + 1] != 0) return true;
-
-	}
-	return false;
+	return on_base;
 
 	
 }
@@ -154,17 +161,17 @@ void cBicho::MoveRight(int map[SCENE_WIDTH][SCENE_HEIGHT])
 
 void cBicho::MoveDown(int map[SCENE_WIDTH][SCENE_HEIGHT])
 {
-	int yaux;
+	//int yaux;
 
 	//Whats next tile?
 	if ((y % TILE_SIZE) == 0)
 	{
-		yaux = y;
-		y -= STEP_LENGTH;
+		//yaux = y;
+		//y -= STEP_LENGTH;
 
-		if (CollidesMapFloor(map, false))
+		if (!CollidesMapFloor(map, false))
 		{
-			y = yaux;
+			y -= STEP_LENGTH;
 			state = STATE_LOOKRIGHT;
 		}
 	}
@@ -191,17 +198,17 @@ void cBicho::Stop()
 void cBicho::MoveUp(int map[SCENE_WIDTH][SCENE_HEIGHT])
 {
 
-	int yaux;
+	//int yaux;
 
 	//Whats next tile?
 	if ((y % TILE_SIZE) == 0)
 	{
-		yaux = y;
-		y += STEP_LENGTH;
+		//yaux = y;
+		//y += STEP_LENGTH;
 
-		if (CollidesMapFloor(map, true))
+		if (!CollidesMapFloor(map, true))
 		{
-			y = yaux;
+			y += STEP_LENGTH;
 			state = STATE_LOOKRIGHT;
 		}
 	}

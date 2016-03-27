@@ -99,7 +99,7 @@ bool cScene::LoadLevel(int level)
 
 	for (j = SCENE_HEIGHT - 1; j >= 0; j--)
 	{
-		px = TILE_SIZE;
+		px = 0;
 		py = (j*TILE_SIZE);
 
 		for (i = 0; i<SCENE_WIDTH; i++)
