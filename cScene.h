@@ -2,8 +2,6 @@
 
 #include "cTexture.h"
 
-#define SCENE_Xo		(2*TILE_SIZE)
-#define SCENE_Yo		TILE_SIZE
 #define SCENE_WIDTH		300
 #define SCENE_HEIGHT	30
 
@@ -21,7 +19,7 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
-	int map[SCENE_WIDTH][SCENE_HEIGHT]; //scene
+	int static map[SCENE_HEIGHT][SCENE_WIDTH]; //scene
 	
 
 	void DrawBackground(int text_id);

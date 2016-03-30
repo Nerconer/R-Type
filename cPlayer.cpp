@@ -159,6 +159,6 @@ void cPlayer::Shoot(int type)
 
 void cPlayer::Advance()
 {
-	this-> x+= VELOCITAT_PLAYER;
+	//if ()
 }
 

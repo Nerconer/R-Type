@@ -61,7 +61,7 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);
 	if(!res) return false;
 
-	Player.SetWidthHeight(25*2,11*2);
+	Player.SetWidthHeight(48,11*2);
 
 	//Projectil iniatilation
 	res = Data.LoadImage(IMG_MISSILE, "img/nau-alpha.png", GL_RGBA);
@@ -72,7 +72,7 @@ bool cGame::Init()
 	}
 	//Coloca el Jugador
 	Player.SetTile(4,10);
-	Player.SetWidthHeight(25*2,11*2);
+	Player.SetWidthHeight(48,11*2);
 	//Et diu cap a un mira
 	Player.SetState(STATE_LOOKRIGHT);
 

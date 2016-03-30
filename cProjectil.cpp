@@ -109,8 +109,8 @@ void cProjectil::DrawRect(int tex_id,float xo,float yo,float xf,float yf, bool t
 	yf = yf / IMG_HEIGHT;
 
 
-	screen_x = posx + SCENE_Xo;
-	screen_y = posy + SCENE_Yo + (BLOCK_SIZE - TILE_SIZE);
+	screen_x = posx;
+	screen_y = posy + (BLOCK_SIZE - TILE_SIZE);
 
 	glEnable(GL_TEXTURE_2D);
 

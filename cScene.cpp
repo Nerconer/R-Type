@@ -4,6 +4,10 @@
 #include "Globals.h"
 
 
+
+int cScene::map[SCENE_HEIGHT][SCENE_WIDTH];
+
+
 cScene::cScene(void)
 {
 	velocitat = 5;
@@ -26,6 +30,8 @@ bool cScene::LoadLevel(int level)
 	int w, h;
 	cData cData;
 
+
+	int static map2[SCENE_WIDTH][SCENE_HEIGHT];
 	cData.GetSize(IMG_TILES_001, &w, &h);
 	//map = new vector<vector<int>>(SCENE_WIDTH, SCENE_HEIGHT); 
 
@@ -77,8 +83,8 @@ bool cScene::LoadLevel(int level)
 						glTexCoord2f(coordx_tile + descx, coordy_tile);	glVertex2i(px + BLOCK_SIZE, py + BLOCK_SIZE);
 						glTexCoord2f(coordx_tile, coordy_tile);	glVertex2i(px, py + BLOCK_SIZE);
 					}
-					map[i][j] = tile;
 					px+=TILE_SIZE;
+					map[j][i] = tile;
 				}
 			}
 
@@ -87,6 +93,11 @@ bool cScene::LoadLevel(int level)
 
 	cData.GetSize(IMG_SPACE, &w, &h);
 	cHelper.setWandH(w, h);
+	/*for (int i = 0; i < SCENE_WIDTH; ++i) {
+		for (int j = 0; j < SCENE_HEIGHT; ++j) {
+			map2[i][j] = map[i][j];
+		}
+	}*/
 
 	fclose(fd);
 	fd = fopen("background001.txt", "r");
@@ -96,6 +107,7 @@ bool cScene::LoadLevel(int level)
 	glBegin(GL_QUADS);
 
 	int count = 0;
+
 
 	for (j = SCENE_HEIGHT - 1; j >= 0; j--)
 	{
@@ -149,6 +161,7 @@ void cScene::Draw(int tex_id)
 	glTranslatef(-velocitat, 0, 0);
 	glCallList(id_DL_level);
 	//Limite del nivel
+	//TILE*SCENE_WIDTH - GAME_SCENE_WIDTH
 	if (velocitat != ((TILE_SIZE*SCENE_WIDTH) - 640)) velocitat += 0.5;
 	glDisable(GL_TEXTURE_2D);
 
@@ -164,7 +177,9 @@ void cScene::DrawBackground(int tex_id)
 	glTranslatef(-velocitatBackground, 0, 0);
 	glCallList(id_DL_background);
 	//Limite del nivel
-	if (velocitat != ((TILE_SIZE*SCENE_WIDTH) - 640)) velocitatBackground += 0.2;
+	//Loop Infinito de Fondo
+	if (velocitatBackground == TILE_SIZE*SCENE_WIDTH) velocitatBackground = 0;
+	else velocitatBackground += 0.2;
 	glDisable(GL_TEXTURE_2D);
 
 

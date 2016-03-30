@@ -53,7 +53,7 @@ bool cBicho::Collides(cRect *rc)
 {
 	return ((x>rc->left) && (x+w<rc->right) && (y>rc->bottom) && (y+h<rc->top));
 }
-bool cBicho::CollidesMapWall(int map[SCENE_WIDTH][SCENE_HEIGHT], bool right)
+bool cBicho::CollidesMapWall(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool right)
 {
 	int tile_x, tile_y;
 	int j;
@@ -61,53 +61,46 @@ bool cBicho::CollidesMapWall(int map[SCENE_WIDTH][SCENE_HEIGHT], bool right)
 
 	tile_x = x / TILE_SIZE;
 	tile_y = y / TILE_SIZE;
-	// w de nau
 	width_tiles = w / TILE_SIZE;
 	height_tiles = h / TILE_SIZE;
 
-	if (right)	tile_x += width_tiles + 1;
+	if (right)	tile_x += width_tiles;
 
-
-
-	if (right) {
-		if (map[tile_x + width_tiles/2][tile_y + height_tiles] != 0) return true;
+	for (j = 0; j<height_tiles; j++)
+	{
+		if (map[tile_y + j][tile_x] != 0)	return true;
 	}
-	else {
 
-		if (map[tile_x + width_tiles/2][tile_y + height_tiles] != 0) return true;
-	}
 	return false;
 }
 
-bool cBicho::CollidesMapFloor(int map[SCENE_WIDTH][SCENE_HEIGHT], bool up)
+bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 {
 	int tile_x, tile_y;
-	int width_tiles, height_tiles;
+	int width_tiles;
 	bool on_base;
 	int i;
 
-	tile_x = x / (TILE_SIZE);
+	tile_x = x / TILE_SIZE;
 	tile_y = y / TILE_SIZE;
 
-
-	width_tiles = (w / TILE_SIZE)-1;
-	height_tiles = (h / TILE_SIZE)+1;
+	width_tiles = w / TILE_SIZE;
+	if ((x % TILE_SIZE) != 0) width_tiles++;
 
 	on_base = false;
 	i = 0;
-	int desc;
-	if (up) desc = height_tiles;
-	else desc = 0;
+	int desc = + 1;
+	if (up) desc = -1;
 	while ((i<width_tiles) && !on_base)
 	{
 		if ((y % TILE_SIZE) == 0)
 		{
-			if (map[(tile_x+i+width_tiles)][tile_y + desc] != 0)
+			if (map[(tile_y + desc)][(tile_x + i)] != 0)
 				on_base = true;
 		}
 		else
 		{
-			if (map[tile_x+i+width_tiles][tile_y] != 0)
+			if (map [(tile_y)][(tile_x + i)] != 0)
 			{
 				on_base = true;
 			}
@@ -115,22 +108,20 @@ bool cBicho::CollidesMapFloor(int map[SCENE_WIDTH][SCENE_HEIGHT], bool up)
 		i++;
 	}
 	return on_base;
-
-	
 }
 void cBicho::GetArea(cRect *rc)
 {
-	rc->left   = x;
-	rc->right  = x+w;
-	rc->bottom = y;
-	rc->top    = y+h;
+	(*rc).left  = x;
+	(*rc).right  = x+w;
+	(*rc).bottom = y;
+	(*rc).top    = y+h;
 }
 void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 {
 	int screen_x,screen_y;
 
-	screen_x = x + SCENE_Xo;
-	screen_y = y + SCENE_Yo + (BLOCK_SIZE - TILE_SIZE);
+	screen_x = x;
+	screen_y = y + (BLOCK_SIZE - TILE_SIZE);
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -147,31 +138,51 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cBicho::MoveLeft(int map[SCENE_WIDTH][SCENE_HEIGHT])
+void cBicho::MoveLeft(int map[SCENE_HEIGHT][SCENE_WIDTH])
 {
-	if (x%TILE_SIZE == 0 && CollidesMapWall(map, false));
+	if ((x % TILE_SIZE) == 0)
+	{
+		int xaux = x;
+		x -= STEP_LENGTH;
+
+		if (CollidesMapWall(map, false))
+		{
+			x = xaux;
+			state = STATE_LOOKLEFT;
+		}
+	}
 	else  x -= STEP_LENGTH;
 }
-void cBicho::MoveRight(int map[SCENE_WIDTH][SCENE_HEIGHT])
+void cBicho::MoveRight(int  map[SCENE_HEIGHT][SCENE_WIDTH])
 {
-	if (x%TILE_SIZE == 0 && CollidesMapWall(map, true));
+	if ((x % TILE_SIZE) == 0)
+	{
+		int xaux = x;
+		x += STEP_LENGTH;
+
+		if (CollidesMapWall(map, true))
+		{
+			x = xaux;
+			state = STATE_LOOKLEFT;
+		}
+	}
 	else x += STEP_LENGTH;
 }
 
 
-void cBicho::MoveDown(int map[SCENE_WIDTH][SCENE_HEIGHT])
+void cBicho::MoveDown(int  map[SCENE_HEIGHT][SCENE_WIDTH])
 {
-	//int yaux;
+	int yaux;
 
 	//Whats next tile?
 	if ((y % TILE_SIZE) == 0)
 	{
-		//yaux = y;
-		//y -= STEP_LENGTH;
+		yaux = y;
+		y -= STEP_LENGTH;
 
-		if (!CollidesMapFloor(map, false))
+		if (CollidesMapFloor(map, false))
 		{
-			y -= STEP_LENGTH;
+			y = yaux;
 			state = STATE_LOOKRIGHT;
 		}
 	}
@@ -195,20 +206,20 @@ void cBicho::Stop()
 	case STATE_WALKDOWN:	state = STATE_LOOKRIGHT; stopDown = true;	break;
 	}
 }
-void cBicho::MoveUp(int map[SCENE_WIDTH][SCENE_HEIGHT])
+void cBicho::MoveUp(int  map[SCENE_HEIGHT][SCENE_WIDTH])
 {
 
-	//int yaux;
+	int yaux;
 
 	//Whats next tile?
 	if ((y % TILE_SIZE) == 0)
 	{
-		//yaux = y;
-		//y += STEP_LENGTH;
+		yaux = y;
+		y += STEP_LENGTH;
 
-		if (!CollidesMapFloor(map, true))
+		if (CollidesMapFloor(map, true))
 		{
-			y += STEP_LENGTH;
+			y = yaux;
 			state = STATE_LOOKRIGHT;
 		}
 	}
