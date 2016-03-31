@@ -77,7 +77,7 @@ bool cBicho::CollidesMapWall(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool right)
 bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 {
 	int tile_x, tile_y;
-	int width_tiles;
+	int width_tiles, height_tiles;
 	bool on_base;
 	int i;
 
@@ -85,12 +85,13 @@ bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 	tile_y = y / TILE_SIZE;
 
 	width_tiles = w / TILE_SIZE;
+	height_tiles = h / TILE_SIZE;
 	if ((x % TILE_SIZE) != 0) width_tiles++;
 
 	on_base = false;
 	i = 0;
-	int desc = + 1;
-	if (up) desc = -1;
+	int desc = 0;
+	if (up) desc = +1;
 	while ((i<width_tiles) && !on_base)
 	{
 		if ((y % TILE_SIZE) == 0)
@@ -100,7 +101,7 @@ bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 		}
 		else
 		{
-			if (map [(tile_y)][(tile_x + i)] != 0)
+			if (map [(tile_y) + desc][(tile_x + i)] != 0)
 			{
 				on_base = true;
 			}
