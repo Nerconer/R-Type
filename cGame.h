@@ -15,10 +15,12 @@
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
 #define KEY_A_MIN 97
+#define KEY_INTRO 13
 
 #define DELAY_PROJ 200
 #define SPEED_PROJ 40
 #define TIME_A_BUTTON 3000
+
 
 class cGame
 {
@@ -47,6 +49,8 @@ public:
 
 	void printOptions();
 
+	void selectLevel();
+
 	cPlayer getPlayer();
 
 private:
@@ -60,4 +64,5 @@ private:
 	int timeButtonAInitial;
 	int timeButtonAFinal;
 	int level;
+	bool fullscreen;
 };
