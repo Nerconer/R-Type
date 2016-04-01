@@ -71,7 +71,8 @@ bool cGame::Init()
 	if(!res) return false;
 
 	if(level == 2) {
-		PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
+		res = PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
+		if (res == false) return res;
 	}
 	//Coloca el Jugador
 	Player.SetTile(4,10);
@@ -96,7 +97,7 @@ bool cGame::Loop()
 		if(level == 0) renderMenu();
 		else if(level == 2) Render();
 		//else if(level == 2) {}
-		else Render();
+		//else Render();
 	}
 	return res;
 }
@@ -189,16 +190,18 @@ bool cGame::Process()
 //Output
 void cGame::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glLoadIdentity();
+	if (level != 0) {
+		glClear(GL_COLOR_BUFFER_BIT);
 
-	Scene.DrawBackground(Data.GetID(IMG_SPACE));
-	Scene.Draw(Data.GetID(IMG_TILES_001));
-	Player.Draw(Data.GetID(IMG_PLAYER));
-	renderProjectils(Data.GetID(IMG_MISSILE));
+		glLoadIdentity();
 
-	glutSwapBuffers();
+		Scene.DrawBackground(Data.GetID(IMG_SPACE));
+		Scene.Draw(Data.GetID(IMG_TILES_001));
+		Player.Draw(Data.GetID(IMG_PLAYER));
+		renderProjectils(Data.GetID(IMG_MISSILE));
+
+		glutSwapBuffers();
+	}
 }
 
 void cGame::activateProjectil(int x, int y, int type)
@@ -316,7 +319,7 @@ bool cGame::ProcessMenu()
 
 						break;
 					case 1:	// Level 2
-						this->level = 1;
+						this->level = 2;
 						Init();
 						break;
 					case 2:	// Back

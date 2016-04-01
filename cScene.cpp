@@ -10,8 +10,8 @@ int cScene::map[SCENE_HEIGHT][SCENE_WIDTH];
 
 cScene::cScene(void)
 {
-	velocitat = 5;
-	velocitatBackground = 2;
+	velocitat = 0;
+	velocitatBackground = 0;
 }
 
 cScene::~cScene(void)
@@ -156,13 +156,15 @@ bool cScene::LoadLevel(int level)
 void cScene::Draw(int tex_id)
 
 {
+	glLoadIdentity();
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glTranslatef(-velocitat, 0, 0);
 	glCallList(id_DL_level);
+	float limit = TILE_SIZE*SCENE_WIDTH - 640;
 	//Limite del nivel
 	//TILE*SCENE_WIDTH - GAME_SCENE_WIDTH
-	if (velocitat != ((TILE_SIZE*SCENE_WIDTH) - 640)) velocitat += 0.5;
+	if (velocitat <= limit) velocitat += 0.5;
 	glDisable(GL_TEXTURE_2D);
 
 
@@ -176,10 +178,10 @@ void cScene::DrawBackground(int tex_id)
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glTranslatef(-velocitatBackground, 0, 0);
 	glCallList(id_DL_background);
+	float limit = TILE_SIZE*SCENE_WIDTH - 640;
 	//Limite del nivel
 	//Loop Infinito de Fondo
-	if (velocitatBackground == TILE_SIZE*SCENE_WIDTH) velocitatBackground = 0;
-	else velocitatBackground += 0.2;
+	if (velocitat <= limit) velocitatBackground += 0.2;
 	glDisable(GL_TEXTURE_2D);
 
 
