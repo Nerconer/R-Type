@@ -5,7 +5,7 @@ bool buttonA = false; // true -> boto 'A' apretat
 
 cGame::cGame(void)
 {
-	level = 1;
+	level = 0;
 }
 
 cGame::~cGame(void)
@@ -93,7 +93,7 @@ bool cGame::Loop()
 		if(level == 0) renderMenu();
 		//else if(level == 1) {}
 		//else if(level == 2) {}
-		Render();
+		else Render();
 	}
 	return res;
 }
@@ -241,6 +241,12 @@ bool cGame::ProcessMenu()
 	return res;
 }
 
+void printString(void* font, const char* string)
+{
+	int len = strlen(string);
+	for(int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
+}
+
 void cGame::renderMenu()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -249,6 +255,10 @@ void cGame::renderMenu()
 	int id = Data.GetID(IMG_MENU_TITOL);
 
 	glMatrixMode(GL_PROJECTION);
+
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glRasterPos2f(0, 0);
+	printString(GLUT_BITMAP_9_BY_15,"holaaa");
 	
 	glLoadIdentity();
 	glEnable(GL_TEXTURE_2D);	
@@ -262,8 +272,9 @@ void cGame::renderMenu()
 
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
 	glutSwapBuffers();
+
+	
 }
 
 cPlayer cGame::getPlayer() {
