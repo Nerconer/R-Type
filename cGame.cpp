@@ -31,6 +31,8 @@ bool cGame::Init()
 		res = Data.LoadImage(IMG_MENU_TITOL, "img/titolRtype.png", GL_RGBA);
 		if (!res) return false;
 
+		res = Data.LoadImage(IMG_MENU_SELECTED, "img/option_selected.png", GL_RGBA);
+		if (!res) return false;
 		// LOADS
 
 		//glDisable(GL_NORMALIZE);
@@ -235,8 +237,12 @@ bool cGame::ProcessMenu()
 {
 	bool res = true;
 
-	if(keys[GLUT_KEY_UP]) {}
-	else if(keys[GLUT_KEY_DOWN]) {}
+	if(keys[GLUT_KEY_UP]) {
+		
+	}
+	else if(keys[GLUT_KEY_DOWN]) {
+	
+	}
 
 	return res;
 }
@@ -245,6 +251,52 @@ void printString(void* font, const char* string)
 {
 	int len = strlen(string);
 	for(int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
+}
+
+void drawOption(int id, float posx, float posy)
+{
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);	
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);
+		
+	glTexCoord2f(0,1);					glVertex2d(posx, posy);
+	glTexCoord2f(1,1);					glVertex2d(posx, posy);
+	glTexCoord2f(1 ,0);					glVertex2d(posx, posy);
+	glTexCoord2f(0,0);					glVertex2d(posx, posy);
+
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	//glPopMatrix();
+}
+
+void cGame::printOptions()
+{	
+	int id_selected = Data.GetID(IMG_MENU_SELECTED);
+	float posx = -0.66; 
+	float posy = 0.2;
+	char *options[3];
+	int optionSelected = 0;
+
+	options[0] = "Play";
+	options[1] = "Instructions";
+	options[2] = "Credits";
+
+	for(int i = 0; i < sizeof(options)/4; ++i) {
+		if(optionSelected == i) { 
+			glColor4f(1.0, 1.0, 1.0, 1.0);
+			glRasterPos2f(posx+0.03, posy);
+			drawOption(IMG_MENU_SELECTED, posx, posy);
+		}
+		else {
+			glColor4f(0.0, 0.7, 0.7, 1.0);
+			glRasterPos2f(posx, posy);
+		}
+		
+		posy-=0.1;
+		printString(GLUT_BITMAP_9_BY_15,options[i]);
+	}
+
 }
 
 void cGame::renderMenu()
@@ -256,17 +308,17 @@ void cGame::renderMenu()
 
 	glMatrixMode(GL_PROJECTION);
 
-	glColor4f(1.0, 1.0, 1.0, 1.0);
-	glRasterPos2f(0, 0);
-	printString(GLUT_BITMAP_9_BY_15,"holaaa");
+	printOptions();
+	
 	
 	glLoadIdentity();
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);	
 	glBindTexture(GL_TEXTURE_2D, id);
 	glBegin(GL_QUADS);
 		
-	glTexCoord2f(0,1 );				glVertex2d(-0.7,0.6);
-	glTexCoord2f(1,1);				glVertex2d(0.7,0.6);
+	glTexCoord2f(0,0.95);				glVertex2d(-0.7,0.5);
+	glTexCoord2f(1,0.95);				glVertex2d(0.7,0.5);
 	glTexCoord2f(1 ,0);					glVertex2d(0.7,0.9);
 	glTexCoord2f(0,0);					glVertex2d(-0.7,0.9);
 

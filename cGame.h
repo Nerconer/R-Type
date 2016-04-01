@@ -4,6 +4,7 @@
 #include "cPlayer.h"
 #include "cData.h"
 #include "cProjectil.h"
+#include "cMenu.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -44,6 +45,8 @@ public:
 
 	void renderMenu();
 
+	void printOptions();
+
 	cPlayer getPlayer();
 
 private:
@@ -51,6 +54,7 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cData Data;
+	cMenu Menu;
 	cProjectil projectils[NUM_MISSILES];
 	int startTimeProj;
 	int timeButtonAInitial;
