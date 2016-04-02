@@ -156,6 +156,7 @@ bool cScene::LoadLevel(int level)
 void cScene::Draw(int tex_id)
 
 {
+	//Si no arrastra el glTranslatef de la anterior!! 
 	glLoadIdentity();
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);

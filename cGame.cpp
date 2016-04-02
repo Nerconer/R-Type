@@ -37,7 +37,7 @@ bool cGame::Init()
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0,GAME_WIDTH,0,GAME_HEIGHT,0,1);
+	glOrtho(0,GAME_WIDTH,-PANEL_SIZE,GAME_HEIGHT,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	
 	glAlphaFunc(GL_GREATER, 0.05f);

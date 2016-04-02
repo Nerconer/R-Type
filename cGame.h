@@ -9,6 +9,8 @@
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
 
+#define PANEL_SIZE 50
+
 #define NUM_MISSILES 252
 #define NUM_ENEMIES 128
 
