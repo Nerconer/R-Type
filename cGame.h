@@ -51,6 +51,8 @@ public:
 
 	void selectLevel();
 
+	void pintaNauMenu(int id, int id1);
+
 	cPlayer getPlayer();
 
 private:
@@ -65,4 +67,20 @@ private:
 	int timeButtonAFinal;
 	int level;
 	bool fullscreen;
+
+	bool menuAnimation;
+	float posy1, posy2; // animacio inici titol
+	bool blinkAnim;
+	int loopsBlink;
+
+	int delayTextMenu;
+	int delayNauMenu;
+
+	int oscilation;
+	bool upMenu; // nau puja
+
+	int delayOscilationMenu;
+
+	int engineAnimMenu;
+	int delayEngineAnimMenu;
 };

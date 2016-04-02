@@ -7,6 +7,22 @@ cGame::cGame(void)
 {
 	level = 0;
 	fullscreen = false;
+
+	menuAnimation = true;
+	posy1 = -1.6;
+	posy2 = -1.2;
+	blinkAnim = true;
+	loopsBlink = 0;
+
+	delayNauMenu = 0;
+	delayTextMenu = 0;
+
+	oscilation = 0;
+	upMenu = true; // puja
+	delayOscilationMenu = 0;
+
+	engineAnimMenu = 0;
+	delayEngineAnimMenu = 0;
 }
 
 cGame::~cGame(void)
@@ -32,8 +48,16 @@ bool cGame::Init()
 		res = Data.LoadImage(IMG_MENU_TITOL, "img/titolRtype.png", GL_RGBA);
 		if (!res) return false;
 
-		res = Data.LoadImage(IMG_MENU_SELECTED, "img/option_selected.png", GL_RGBA);
-		if (!res) return false;
+		//Player initialization
+		res = Data.LoadImage(IMG_PLAYER,"img/nau-alpha.png",GL_RGBA);
+		if(!res) return false;
+
+		res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);
+		if(!res) return false;
+
+		//res = Data.LoadImage(IMG_MENU_SELECTED, "img/option_selected.png", GL_RGBA);
+		//if (!res) return false;
+
 		// LOADS
 
 		//glDisable(GL_NORMALIZE);
@@ -50,6 +74,8 @@ bool cGame::Init()
 
 	startTimeProj = 0;
 
+	Player.SetWidthHeight(48,11*2);
+
 	//Scene initialization
 	res = Data.LoadImage(IMG_TILES_001,"img/level/tiles.png",GL_RGBA);
 	if(!res) return false;
@@ -57,14 +83,6 @@ bool cGame::Init()
 	if (!res) return false;
 	res = Scene.LoadLevel(3);
 	if(!res) return false;
-	//Player initialization
-	res = Data.LoadImage(IMG_PLAYER,"img/nau-alpha.png",GL_RGBA);
-	if(!res) return false;
-
-	res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);
-	if(!res) return false;
-
-	Player.SetWidthHeight(48,11*2);
 
 	//Projectil iniatilation
 	res = Data.LoadImage(IMG_MISSILE, "img/nau-alpha.png", GL_RGBA);
@@ -359,7 +377,7 @@ void cGame::printOptions()
 {	
 	int id_selected = Data.GetID(IMG_MENU_SELECTED);
 	float posx = -0.66; 
-	float posy = 0.2;
+	float posy = 0.15;
 	char *options[4];
 
 	options[0] = "Play";
@@ -490,44 +508,183 @@ void cGame::selectLevel()
 	*/
 }
 
-void cGame::renderMenu()
+void cGame::pintaNauMenu(int id, int id1)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glLoadIdentity();
+	++delayOscilationMenu;
 
-	int id = Data.GetID(IMG_MENU_TITOL);
-
-	glMatrixMode(GL_PROJECTION);
-
-	switch(Menu.getTypeMenu()) {
-		case MENU_PRINCIPAL:
-			printOptions();
-			break;
-		case MENU_INSTR:
-			printInstructions();
-			break;
-		case MENU_CR:
-			printCredits();
-			break;
-		case MENU_SELECT_LEVEL:
-			selectLevel();
-			break;
+	if(delayOscilationMenu >= 10) {
+		delayOscilationMenu = 0;
+		if(upMenu) {
+			this->oscilation+=2;
+		}
+		else if(oscilation >= 90) this->upMenu = false;
+		else if(!upMenu) {
+			this->oscilation-=2;
+		}
+		else if(oscilation <=0) this->upMenu = true;
 	}
 	
-	glLoadIdentity();
-	glColor4f(1.0, 1.0, 1.0, 1.0);
-	glEnable(GL_TEXTURE_2D);	
-	glBindTexture(GL_TEXTURE_2D, id);
-	glBegin(GL_QUADS);
-		
-	glTexCoord2f(0,0.95);				glVertex2d(-0.7,0.5);
-	glTexCoord2f(1,0.95);				glVertex2d(0.7,0.5);
-	glTexCoord2f(1 ,0);					glVertex2d(0.7,0.9);
-	glTexCoord2f(0,0);					glVertex2d(-0.7,0.9);
+	// NAU
+	posTexture p;
 
+	p.xo = 166.0f / IMG_WIDTH_PLAYER;
+	p.yo = 1.0f / IMG_HEIGHT_PLAYER;
+	p.xf = 199.0f / IMG_WIDTH_PLAYER;
+	p.yf = 16.0f / IMG_HEIGHT_PLAYER;
+
+
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf);	glVertex2d(0.2,-0.08+sin((float) oscilation)*0.01);
+		glTexCoord2f(p.xf,p.yf);	glVertex2d(0.5,-0.08+sin((float) oscilation)*0.01);
+		glTexCoord2f(p.xf,p.yo);	glVertex2d(0.5,0.12+sin((float) oscilation)*0.01);
+		glTexCoord2f(p.xo,p.yo);	glVertex2d(0.2,0.12+sin((float) oscilation)*0.01);
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	glutSwapBuffers();
+	glPopMatrix();
+
+
+	// ANIMACIO MOTOR
+	posTexture p1;
+	posTexture p2;
+
+	p1.xo = 6.0f / IMG_WIDTH_PLAYER1;
+	p1.yo = 97.0f / IMG_HEIGHT_PLAYER1;
+	p1.xf = 21.0f / IMG_WIDTH_PLAYER1;
+	p1.yf = 105.0f / IMG_HEIGHT_PLAYER1;
+
+	p2.xo = 24.0f / IMG_WIDTH_PLAYER1;
+	p2.yo = 92.0f / IMG_HEIGHT_PLAYER1;
+	p2.xf = 41.0f / IMG_WIDTH_PLAYER1;
+	p2.yf = 108.0f / IMG_HEIGHT_PLAYER1;
+
+	int transSpeed = 15;
+	if(this->engineAnimMenu == 0) {
+		if(delayEngineAnimMenu == transSpeed) {
+			delayEngineAnimMenu = 0;
+			this->engineAnimMenu = 1;
+		}
+		else ++delayEngineAnimMenu;
+		
+	}
+	else if(this->engineAnimMenu == 1) {
+		if(delayEngineAnimMenu == transSpeed) {
+			delayEngineAnimMenu = 0;
+			this->engineAnimMenu = 2;
+		}
+		else ++delayEngineAnimMenu;
+		
+		glLoadIdentity();
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glBindTexture(GL_TEXTURE_2D, id1);
+		glBegin(GL_QUADS);	
+			glTexCoord2f(p1.xo,p1.yf);	glVertex2d(0.05,-0.076+sin((float) oscilation)*0.01);
+			glTexCoord2f(p1.xf,p1.yf);	glVertex2d(0.21,-0.076+sin((float) oscilation)*0.01);
+			glTexCoord2f(p1.xf,p1.yo);	glVertex2d(0.21,0.016+sin((float) oscilation)*0.01);
+			glTexCoord2f(p1.xo,p1.yo);	glVertex2d(0.05,0.016+sin((float) oscilation)*0.01);
+		glEnd();
+		glPopMatrix();
+	}
+	else if(this->engineAnimMenu == 2) {
+		if(delayEngineAnimMenu == transSpeed) {
+			delayEngineAnimMenu = 0;
+			this->engineAnimMenu = 0;
+		}
+		else ++delayEngineAnimMenu;
+		
+		glLoadIdentity();
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glBindTexture(GL_TEXTURE_2D, id1);
+		glBegin(GL_QUADS);	
+			glTexCoord2f(p2.xo,p2.yf);	glVertex2d(-0.05,-0.15+sin((float) oscilation)*0.01);
+			glTexCoord2f(p2.xf,p2.yf);	glVertex2d(0.21,-0.15+sin((float) oscilation)*0.01);
+			glTexCoord2f(p2.xf,p2.yo);	glVertex2d(0.21,0.1+sin((float) oscilation)*0.01);
+			glTexCoord2f(p2.xo,p2.yo);	glVertex2d(-0.05,0.1+sin((float) oscilation)*0.01);
+		glEnd();
+		glPopMatrix();
+	}
+}
+
+
+void cGame::renderMenu()
+{
+	int id = Data.GetID(IMG_MENU_TITOL);
+	int id_player = Data.GetID(IMG_PLAYER);
+	int id_player1 = Data.GetID(IMG_PLAYER1);
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+
+	if(posy1 <= 0.5) {
+		if(blinkAnim) {
+			glLoadIdentity();
+			glColor4f(1.0, 1.0, 1.0, 1.0);
+			glEnable(GL_TEXTURE_2D);	
+			glBindTexture(GL_TEXTURE_2D, id);
+			glBegin(GL_QUADS);
+		
+			glTexCoord2f(0,0.95);				glVertex2d(-0.7,posy1+=0.02);
+			glTexCoord2f(1,0.95);				glVertex2d(0.7,posy1+=0.02);
+			glTexCoord2f(1 ,0);					glVertex2d(0.7,posy2+=0.02);
+			glTexCoord2f(0,0);					glVertex2d(-0.7,posy2+=0.02);
+
+			glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
+		if(this->loopsBlink == 2) {
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f );
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			blinkAnim = !blinkAnim;
+			loopsBlink = 0;
+		}
+		++loopsBlink;
+		glutSwapBuffers();
+	}
+	else {	// End title aninmation
+		if(delayTextMenu == 30) {
+			switch(Menu.getTypeMenu()) {
+				case MENU_PRINCIPAL:
+					printOptions();
+					break;
+				case MENU_INSTR:
+					printInstructions();
+					break;
+				case MENU_CR:
+					printCredits();
+					break;
+				case MENU_SELECT_LEVEL:
+					selectLevel();
+					break;
+			}
+		}
+		if(delayTextMenu < 30) ++delayTextMenu;
+
+		if(delayNauMenu < 30) ++delayNauMenu;
+		if(delayNauMenu == 30) {
+			if(Menu.getTypeMenu() == MENU_PRINCIPAL) pintaNauMenu(id_player, id_player1);
+		}
+	
+		glLoadIdentity();
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);	
+		glBindTexture(GL_TEXTURE_2D, id);
+		glBegin(GL_QUADS);
+		
+		glTexCoord2f(0,0.95);				glVertex2d(-0.7,0.5);
+		glTexCoord2f(1,0.95);				glVertex2d(0.7,0.5);
+		glTexCoord2f(1 ,0);					glVertex2d(0.7,0.9);
+		glTexCoord2f(0,0);					glVertex2d(-0.7,0.9);
+
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		glutSwapBuffers();
+	}
 }
 
 cPlayer cGame::getPlayer() {

@@ -9,6 +9,10 @@
 #define IMG_WIDTH_PLAYER 532
 #define IMG_HEIGHT_PLAYER 372
 
+// nau-alpha2.png
+#define IMG_WIDTH_PLAYER1 269
+#define IMG_HEIGHT_PLAYER1 269
+
 class cPlayer: public cBicho
 {
 public:
