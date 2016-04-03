@@ -220,6 +220,11 @@ bool cGame::Process()
 	return res;
 }
 
+void printString(void* font, const char* string)
+{
+	int len = strlen(string);
+	for (int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
+}
 
 
 void cGame::RenderGUI()
@@ -461,11 +466,6 @@ bool cGame::ProcessMenu()
 	return res;
 }
 
-void printString(void* font, const char* string)
-{
-	int len = strlen(string);
-	for(int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
-}
 
 void drawOption(int id, float posx, float posy)
 {
