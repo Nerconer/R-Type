@@ -76,6 +76,8 @@ cPlayer::cPlayer() {
 	p.yf = 16.0f;
 
 	textSeq[4] = p;
+
+	this->lives = 3;
 }
 cPlayer::~cPlayer(){}
 
@@ -173,5 +175,10 @@ void cPlayer::Advance()
 		}
 	}
 	if (advance) steps += 0.5;
+}
+
+int cPlayer::getLives()
+{
+	return this->lives;
 }
 

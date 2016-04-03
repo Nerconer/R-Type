@@ -23,6 +23,10 @@ public:
 	void Shoot(int type);
 	void Advance();
 
+	int getLives();
+
+private:
+	int lives;
 	float steps;
 
 };
