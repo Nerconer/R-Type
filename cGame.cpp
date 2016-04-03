@@ -156,7 +156,10 @@ bool cGame::Process()
 	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
 	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
 	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
-	else Player.Stop();
+	else {
+		Player.Stop();
+		Player.Advance();
+	}
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
 		int x,y;
@@ -233,8 +236,11 @@ void cGame::Render()
 			Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
 			Scene.Draw(Data.GetID(IMG_TILES_002));
 		}
+		//Player.Advance();
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		renderProjectils(Data.GetID(IMG_MISSILE));
+
+		
 
 		glutSwapBuffers();
 	}

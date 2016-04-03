@@ -23,4 +23,6 @@ public:
 	void Shoot(int type);
 	void Advance();
 
+	float steps;
+
 };

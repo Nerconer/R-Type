@@ -5,6 +5,8 @@ cPlayer::cPlayer() {
 	posTexture p;
 	textSeq = vector<posTexture>(5);
 
+	steps = 0;
+
 	//STATE_LOOKRIGHT
 	/*p.xo = 3.0f;
 	p.yo = 34.0f;
@@ -159,6 +161,17 @@ void cPlayer::Shoot(int type)
 
 void cPlayer::Advance()
 {
-	//if ()
+	cScene Scene;
+	int xold = x;
+	bool advance = true;
+	if (steps >= 1) {
+		steps = 0;
+		x += 1;
+		if (CollidesMapWall(&Scene.map, true)) {
+			x = xold;
+			advance = false;
+		}
+	}
+	if (advance) steps += 0.5;
 }
 

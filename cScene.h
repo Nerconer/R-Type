@@ -19,7 +19,11 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
+
 	int static map[SCENE_HEIGHT][SCENE_WIDTH]; //scene
+
+	float static velocitat;
+	float static velocitatBackground;
 	
 
 	void DrawBackground(int text_id);
@@ -29,6 +33,5 @@ private:
 	int id_DL_background;								//actual level display list
 	int id_DL_level;
 
-	float velocitat;
-	float velocitatBackground;
+	
 };

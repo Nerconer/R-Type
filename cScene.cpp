@@ -6,12 +6,12 @@
 
 
 int cScene::map[SCENE_HEIGHT][SCENE_WIDTH];
+float cScene::velocitat;
+float cScene::velocitatBackground;
 
 
 cScene::cScene(void)
 {
-	velocitat = 0;
-	velocitatBackground = 0;
 }
 
 cScene::~cScene(void)
@@ -160,6 +160,7 @@ bool cScene::LoadLevel(int level)
 void cScene::Draw(int tex_id)
 
 {
+	if (!velocitat) velocitat = 0;
 	//Si no arrastra el glTranslatef de la anterior!! 
 	glLoadIdentity();
 	glEnable(GL_TEXTURE_2D);
@@ -178,7 +179,7 @@ void cScene::Draw(int tex_id)
 void cScene::DrawBackground(int tex_id)
 
 {
-	
+	if (!velocitatBackground) velocitat = 0;
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glTranslatef(-velocitatBackground, 0, 0);
@@ -192,4 +193,6 @@ void cScene::DrawBackground(int tex_id)
 
 
 }
+
+
 

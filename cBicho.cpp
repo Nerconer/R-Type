@@ -68,7 +68,7 @@ bool cBicho::CollidesMapWall(int (*map)[SCENE_HEIGHT][SCENE_WIDTH], bool right)
 
 	for (j = 0; j<height_tiles; j++)
 	{
-		if ((*map)[tile_y + j][tile_x] != 0)	return true;
+		if ((*map)[tile_y + j][tile_x] != 0) return true;
 	}
 
 	return false;
@@ -141,33 +141,42 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 
 void cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
-	if ((x % TILE_SIZE) == 0)
-	{
-		int xaux = x;
-		x -= STEP_LENGTH;
-
-		if (CollidesMapWall(map, false))
+	cScene cScene;
+	int limit = cScene.velocitat;
+	if ((x - STEP_LENGTH) > limit) {
+		if ((x % TILE_SIZE) == 0)
 		{
-			x = xaux;
-			state = STATE_LOOKLEFT;
+			int xaux = x;
+			x -= STEP_LENGTH;
+
+			if (CollidesMapWall(map, false))
+			{
+				x = xaux;
+				state = STATE_LOOKRIGHT;
+			}
 		}
+		else  x -= STEP_LENGTH;
 	}
-	else  x -= STEP_LENGTH;
 }
 void cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
-	if ((x % TILE_SIZE) == 0)
-	{
-		int xaux = x;
-		x += STEP_LENGTH;
+	cScene Scene;
+	int limit = Scene.velocitat + 640;
 
-		if (CollidesMapWall(map, true))
+//	if ((x + STEP_LENGTH) < limit) {
+		if ((x % TILE_SIZE) == 0)
 		{
-			x = xaux;
-			state = STATE_LOOKLEFT;
+			int xaux = x;
+			x += STEP_LENGTH;
+
+			if (CollidesMapWall(map, true))
+			{
+				x = xaux;
+				state = STATE_LOOKRIGHT;
+			}
 		}
-	}
-	else x += STEP_LENGTH;
+		else x += STEP_LENGTH;
+	//}
 }
 
 
@@ -206,6 +215,8 @@ void cBicho::Stop()
 	case STATE_WALKUP:	state = STATE_LOOKRIGHT; stopUp = true;		break;
 	case STATE_WALKDOWN:	state = STATE_LOOKRIGHT; stopDown = true;	break;
 	}
+
+//	if (CollidesMapWall(c))
 }
 void cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
