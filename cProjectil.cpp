@@ -143,3 +143,27 @@ void cProjectil::Draw(int id)
 		else{}
 	}
 }
+
+bool cProjectil::isCollision(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]) {
+	int tile_x, tile_y;
+	int j;
+	int width_tiles, height_tiles;
+
+	tile_x = x / TILE_SIZE;
+	tile_y = y / TILE_SIZE;
+	width_tiles = w / TILE_SIZE;
+	height_tiles = h / TILE_SIZE;
+	if (width_tiles == 0) width_tiles = 2;
+	else width_tiles *= 2;
+	if (height_tiles == 0) height_tiles = 1;
+
+	tile_x += width_tiles;
+
+	for (j = 0; j<height_tiles; j++)
+	{
+		if ((*map)[tile_y + j][tile_x] != 0)	return true;
+	}
+
+	return false;
+	
+}

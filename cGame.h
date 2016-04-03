@@ -20,7 +20,7 @@
 #define KEY_INTRO 13
 
 #define DELAY_PROJ 200
-#define SPEED_PROJ 40
+#define SPEED_PROJ 32
 #define TIME_A_BUTTON 3000
 
 
