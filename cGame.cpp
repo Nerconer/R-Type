@@ -1,11 +1,10 @@
 #include "cGame.h"
 #include "Globals.h"
 
-bool buttonA = false; // true -> boto 'A' apretat
-
 cGame::cGame(void)
 {
 	level = 0;
+	buttonA = false;
 	fullscreen = false;
 
 	menuAnimation = true;
@@ -120,7 +119,7 @@ bool cGame::Loop()
 	else res = Process();
 
 	if(res) {
-		if(level == 0) renderMenu();
+		if(level == 0) RenderMenu();
 		else  Render();
 		//else if(level == 2) {}
 		//else Render();
@@ -181,11 +180,11 @@ bool cGame::Process()
 			int x,y;
 			int diff = timeButtonAFinal - timeButtonAInitial;
 			Player.GetPosition(&x,&y);
-			if(diff > 0 && diff < 200) {
+			if(diff > 0 && diff < TIME_MEDIUM_SHOT) {
 				activateProjectil(x,y,0);
 				Player.Shoot(0);
 			}
-			else if(diff > 200 && diff < 2000) { // atac semi fort
+			else if(diff > TIME_MEDIUM_SHOT && diff < TIME_STRONG_SHOT) { // atac semi fort
 				activateProjectil(x,y,1);
 				Player.Shoot(1);
 			}
@@ -213,10 +212,98 @@ bool cGame::Process()
 	return res;
 }
 
+void printString(void* font, const char* string)
+{
+	int len = strlen(string);
+	for(int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
+}
+
+void cGame::RenderGUI()
+{
+	int id = Data.GetID(IMG_PLAYER);
+	int w, h;
+	posTexture p;
+	int screen_x, screen_y;
+	int text_y;
+
+	p.xo = 166.0f / IMG_WIDTH_PLAYER;
+	p.yo = 1.0f / IMG_HEIGHT_PLAYER;
+	p.xf = 199.0f / IMG_WIDTH_PLAYER;
+	p.yf = 16.0f / IMG_HEIGHT_PLAYER;
+
+	Player.GetWidthHeight(&w, &h);
+	screen_x = 25;
+	screen_y = -20;
+
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf);	glVertex2d(screen_x * 0.8,(screen_y - h) * 0.8);
+		glTexCoord2f(p.xf,p.yf);	glVertex2d((screen_x + w) * 0.8,(screen_y - h) * 0.8);
+		glTexCoord2f(p.xf,p.yo);	glVertex2d((screen_x + w) * 0.8, screen_y * 0.8);
+		glTexCoord2f(p.xo,p.yo);	glVertex2d(screen_x * 0.8, screen_y * 0.8);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+
+	// LIVES
+	string s;
+	stringstream out;
+	out << Player.getLives();
+	s = out.str();
+
+	char second[32];
+	strcpy(second, s.c_str());
+	char first[32];
+	strcpy (first,"x");
+	strcat(first,second);
+
+	text_y = (screen_y-h) + 12;
+	glRasterPos2f(60, text_y);
+	printString(GLUT_BITMAP_9_BY_15, first);
+
+	// LOADING SHOT
+	stringstream out1;
+	int time_shot;
+	double time_converted;
+
+	if(!buttonA) time_shot = 0;
+	else time_shot = timeButtonAFinal - timeButtonAInitial;
+	if(time_shot < 0 ) time_shot = 0;
+
+	time_converted =  (double) time_shot / TIME_STRONG_SHOT * 100;
+	time_shot = time_converted;
+	if(time_shot > 100) time_shot = 100;
+
+	out1 << time_shot;
+	s = out1.str();
+
+	strcpy(second, s.c_str());
+	strcpy (first,"");
+	strcat(first,second);
+	strcpy (second,"%");
+	strcat(first,second);
+
+	glRasterPos2f(120, text_y);
+	printString(GLUT_BITMAP_9_BY_15, "Shot:");
+
+	if(time_shot < 30) glColor4f(1.0, 0.0, 0.0, 1.0);
+	else if (time_shot < 70) glColor4f(1.0, 0.64, 0.0, 1.0);
+	else if (time_shot < 100) glColor4f(1.0, 1.0, 0.0, 1.0);
+	else if (time_shot == 100) glColor4f(0.0, 1.0, 0.0, 1.0);
+
+	glRasterPos2f(170, text_y);
+	printString(GLUT_BITMAP_9_BY_15, first);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+}
+
 //Output
 void cGame::Render()
 {
 	if (level != 0) {
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glLoadIdentity();
@@ -232,6 +319,8 @@ void cGame::Render()
 		}
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		renderProjectils(Data.GetID(IMG_MISSILE));
+
+		RenderGUI();
 
 		glutSwapBuffers();
 	}
@@ -365,12 +454,6 @@ bool cGame::ProcessMenu()
 			break;
 	}
 	return res;
-}
-
-void printString(void* font, const char* string)
-{
-	int len = strlen(string);
-	for(int i = 0; i < len; i++) glutBitmapCharacter(font, string[i]);
 }
 
 void drawOption(int id, float posx, float posy)
@@ -626,7 +709,7 @@ void cGame::pintaNauMenu(int id, int id1)
 }
 
 
-void cGame::renderMenu()
+void cGame::RenderMenu()
 {
 	int id = Data.GetID(IMG_MENU_TITOL);
 	int id_player = Data.GetID(IMG_PLAYER);

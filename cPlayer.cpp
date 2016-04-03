@@ -74,6 +74,8 @@ cPlayer::cPlayer() {
 	p.yf = 16.0f;
 
 	textSeq[4] = p;
+
+	this->lives = 3;
 }
 cPlayer::~cPlayer(){}
 
@@ -160,5 +162,10 @@ void cPlayer::Shoot(int type)
 void cPlayer::Advance()
 {
 	//if ()
+}
+
+int cPlayer::getLives()
+{
+	return this->lives;
 }
 

@@ -21,7 +21,8 @@
 
 #define DELAY_PROJ 200
 #define SPEED_PROJ 40
-#define TIME_A_BUTTON 3000
+#define TIME_MEDIUM_SHOT 200
+#define TIME_STRONG_SHOT 2000
 
 
 class cGame
@@ -45,11 +46,13 @@ public:
 	//Output
 	void Render();
 
+	void RenderGUI();
+
 	void activateProjectil(int x, int y, int type);
 
 	void renderProjectils(int textId);
 
-	void renderMenu();
+	void RenderMenu();
 
 	void printOptions();
 
@@ -66,6 +69,7 @@ private:
 	cData Data;
 	cMenu Menu;
 	cProjectil projectils[NUM_MISSILES];
+	bool buttonA;
 	int startTimeProj;
 	int timeButtonAInitial;
 	int timeButtonAFinal;
