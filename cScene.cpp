@@ -32,7 +32,10 @@ bool cScene::LoadLevel(int level)
 
 
 	int static map2[SCENE_WIDTH][SCENE_HEIGHT];
-	cData.GetSize(IMG_TILES_001, &w, &h);
+	if (level == 2)
+		cData.GetSize(IMG_TILES_001, &w, &h);
+	else
+		cData.GetSize(IMG_TILES_002, &w, &h);
 	//map = new vector<vector<int>>(SCENE_WIDTH, SCENE_HEIGHT); 
 
 	cHelper cHelper;
@@ -91,16 +94,17 @@ bool cScene::LoadLevel(int level)
 		glEnd();
 	glEndList();
 
-	cData.GetSize(IMG_SPACE, &w, &h);
-	cHelper.setWandH(w, h);
-	/*for (int i = 0; i < SCENE_WIDTH; ++i) {
-		for (int j = 0; j < SCENE_HEIGHT; ++j) {
-			map2[i][j] = map[i][j];
-		}
-	}*/
-
 	fclose(fd);
-	fd = fopen("background001.txt", "r");
+	if (level == 2) {
+		cData.GetSize(IMG_SPACE, &w, &h);
+		cHelper.setWandH(w, h);
+		fd = fopen("background02.txt", "r");
+	}
+	else {
+		cData.GetSize(IMG_SPACE_2, &w, &h);
+		cHelper.setWandH(w, h);
+		fd = fopen("background01.txt", "r");
+	}
 	if (fd == false) return false;
 	id_DL_background=glGenLists(1);
 	glNewList(id_DL_background, GL_COMPILE);

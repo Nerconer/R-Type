@@ -31,6 +31,8 @@ public:
 	virtual ~cGame(void);
 
 	bool Init();
+	bool InitMenu();
+	bool InitLevelPlay();
 	bool Loop();
 	void Finalize();
 

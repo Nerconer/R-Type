@@ -77,18 +77,26 @@ bool cGame::Init()
 	Player.SetWidthHeight(48,11*2);
 
 	//Scene initialization
-	res = Data.LoadImage(IMG_TILES_001,"img/level/tiles.png",GL_RGBA);
+	res = Data.LoadImage(IMG_TILES_001,"img/level1/tiles.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_SPACE, "img/level/level01.png", GL_RGBA);
+	res = Data.LoadImage(IMG_SPACE, "img/level1/level01.png", GL_RGBA);
 	if (!res) return false;
-	res = Scene.LoadLevel(3);
+	res = Data.LoadImage(IMG_TILES_002, "img/level0/RockTile.png", GL_RGBA);
+	if (!res) return false;
+	res = Data.LoadImage(IMG_SPACE_2, "img/level0/background.png", GL_RGBA);
+	if (!res) return false;
+
+	if (level == 2) 
+		res = Scene.LoadLevel(2);
+	else res = Scene.LoadLevel(1);
+	
 	if(!res) return false;
 
 	//Projectil iniatilation
 	res = Data.LoadImage(IMG_MISSILE, "img/nau-alpha.png", GL_RGBA);
 	if(!res) return false;
 
-	if(level == 2) {
+	if(level > 0) {
 		res = PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
 		if (res == false) return res;
 	}
@@ -113,7 +121,7 @@ bool cGame::Loop()
 
 	if(res) {
 		if(level == 0) renderMenu();
-		else if(level == 2) Render();
+		else  Render();
 		//else if(level == 2) {}
 		//else Render();
 	}
@@ -213,8 +221,15 @@ void cGame::Render()
 
 		glLoadIdentity();
 
-		Scene.DrawBackground(Data.GetID(IMG_SPACE));
-		Scene.Draw(Data.GetID(IMG_TILES_001));
+		if (level == 2) {
+
+			Scene.DrawBackground(Data.GetID(IMG_SPACE));
+			Scene.Draw(Data.GetID(IMG_TILES_001));
+		}
+		else {
+			Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
+			Scene.Draw(Data.GetID(IMG_TILES_002));
+		}
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		renderProjectils(Data.GetID(IMG_MISSILE));
 
@@ -334,7 +349,8 @@ bool cGame::ProcessMenu()
 				keys[KEY_INTRO] = false;
 				switch(Menu.getSO()){
 					case 0:	// Level 1
-
+						this->level = 1;
+						Init();
 						break;
 					case 1:	// Level 2
 						this->level = 2;
