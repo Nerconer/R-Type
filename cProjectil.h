@@ -33,7 +33,7 @@
 #define IMG_HEIGHT 372
 
 
-class cProjectil
+class cProjectil 
 {
 public:
 	cProjectil(void);
@@ -57,6 +57,8 @@ public:
 	void setDimensions(int w, int h);
 
 	bool canMove();
+
+	bool isCollision(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
 
 private:
 	bool active;

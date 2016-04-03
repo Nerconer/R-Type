@@ -53,7 +53,7 @@ bool cBicho::Collides(cRect *rc)
 {
 	return ((x>rc->left) && (x+w<rc->right) && (y>rc->bottom) && (y+h<rc->top));
 }
-bool cBicho::CollidesMapWall(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool right)
+bool cBicho::CollidesMapWall(int (*map)[SCENE_HEIGHT][SCENE_WIDTH], bool right)
 {
 	int tile_x, tile_y;
 	int j;
@@ -68,13 +68,13 @@ bool cBicho::CollidesMapWall(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool right)
 
 	for (j = 0; j<height_tiles; j++)
 	{
-		if (map[tile_y + j][tile_x] != 0)	return true;
+		if ((*map)[tile_y + j][tile_x] != 0)	return true;
 	}
 
 	return false;
 }
 
-bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
+bool cBicho::CollidesMapFloor(int (*map)[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 {
 	int tile_x, tile_y;
 	int width_tiles, height_tiles;
@@ -96,12 +96,12 @@ bool cBicho::CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up)
 	{
 		if ((y % TILE_SIZE) == 0)
 		{
-			if (map[(tile_y + desc)][(tile_x + i)] != 0)
+			if ((*map)[(tile_y + desc)][(tile_x + i)] != 0)
 				on_base = true;
 		}
 		else
 		{
-			if (map [(tile_y) + desc][(tile_x + i)] != 0)
+			if ((*map)[(tile_y) + desc][(tile_x + i)] != 0)
 			{
 				on_base = true;
 			}
@@ -139,7 +139,7 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cBicho::MoveLeft(int map[SCENE_HEIGHT][SCENE_WIDTH])
+void cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	if ((x % TILE_SIZE) == 0)
 	{
@@ -154,7 +154,7 @@ void cBicho::MoveLeft(int map[SCENE_HEIGHT][SCENE_WIDTH])
 	}
 	else  x -= STEP_LENGTH;
 }
-void cBicho::MoveRight(int  map[SCENE_HEIGHT][SCENE_WIDTH])
+void cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	if ((x % TILE_SIZE) == 0)
 	{
@@ -171,7 +171,7 @@ void cBicho::MoveRight(int  map[SCENE_HEIGHT][SCENE_WIDTH])
 }
 
 
-void cBicho::MoveDown(int  map[SCENE_HEIGHT][SCENE_WIDTH])
+void cBicho::MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	int yaux;
 
@@ -207,7 +207,7 @@ void cBicho::Stop()
 	case STATE_WALKDOWN:	state = STATE_LOOKRIGHT; stopDown = true;	break;
 	}
 }
-void cBicho::MoveUp(int  map[SCENE_HEIGHT][SCENE_WIDTH])
+void cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 
 	int yaux;

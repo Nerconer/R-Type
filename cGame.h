@@ -20,9 +20,10 @@
 #define KEY_INTRO 13
 
 #define DELAY_PROJ 200
-#define SPEED_PROJ 40
+#define SPEED_PROJ 32
 #define TIME_MEDIUM_SHOT 200
 #define TIME_STRONG_SHOT 2000
+#define TIME_A_BUTTON 3000
 
 
 class cGame

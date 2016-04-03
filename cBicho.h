@@ -39,15 +39,15 @@ public:
 	void GetWidthHeight(int *w,int *h);
 
 	bool Collides(cRect *rc);
-	bool CollidesMapWall(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool right);
-	bool CollidesMapFloor(int  map[SCENE_HEIGHT][SCENE_WIDTH], bool up);
+	bool CollidesMapWall(int (*map)[SCENE_HEIGHT][SCENE_WIDTH], bool right);
+	bool CollidesMapFloor(int (*map)[SCENE_HEIGHT][SCENE_WIDTH], bool up);
 	void GetArea(cRect *rc);
 	void DrawRect(int tex_id, float xo, float yo, float xf, float yf);
 
-	void MoveRight(int  map[SCENE_HEIGHT][SCENE_WIDTH]);
-	void MoveLeft(int  map[SCENE_HEIGHT][SCENE_WIDTH]);
-	void MoveUp(int  map[SCENE_HEIGHT][SCENE_WIDTH]);
-	void MoveDown(int  map[SCENE_HEIGHT][SCENE_WIDTH]);
+	void MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
+	void MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
+	void MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
+	void MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
 	void Stop();
 
 	virtual void Shoot();

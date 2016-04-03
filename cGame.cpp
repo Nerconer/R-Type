@@ -151,10 +151,10 @@ bool cGame::Process()
 
 	//Player.Advance();
 
-	if (keys[GLUT_KEY_UP])			Player.MoveUp(Scene.map);
-	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(Scene.map);
-	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.map);
-	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(Scene.map);
+	if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
+	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
+	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
+	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
 	else Player.Stop();
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
@@ -204,7 +204,10 @@ bool cGame::Process()
 
 				projectils[i].getPosition(&x, &y);
 				x = x + SPEED_PROJ;
-				projectils[i].setPosition(x, y);
+				if (!projectils[i].isCollision(&Scene.map)) {
+					projectils[i].setPosition(x, y);
+				}
+				else projectils[i].setActive(false);
 			}
 		}
 	}
@@ -353,8 +356,8 @@ void cGame::renderProjectils(int textId)
 			if(projectils[i].getType() == 2) {
 				projectils[i].setDimensions(81*1.5,18*1.5);
 			}
-
-			projectils[i].Draw(textId);
+			if (!projectils[i].isCollision(&Scene.map))
+				projectils[i].Draw(textId);
 		}
 	}
 }
