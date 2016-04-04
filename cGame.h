@@ -13,7 +13,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 252
-#define NUM_ENEMIES 2
+#define NUM_ENEMIES 10
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -25,6 +25,9 @@
 #define TIME_MEDIUM_SHOT 200
 #define TIME_STRONG_SHOT 2000
 #define TIME_A_BUTTON 3000
+
+#define SPEED_ENEMY1 3
+#define SPEED_ENEMY2 1
 
 
 class cGame
@@ -54,8 +57,6 @@ public:
 
 	void RenderProjectils(int textId);
 
-	void RenderEnemies(int textID);
-
 	void RenderMenu();
 
 	void printOptions();
@@ -65,6 +66,10 @@ public:
 	void pintaNauMenu(int id, int id1);
 
 	bool generateEnemies(int level);
+
+	bool isVisible(int x);
+
+	void RenderEnemies(int id1, int id2);
 
 	cPlayer getPlayer();
 

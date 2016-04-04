@@ -30,6 +30,14 @@ cGame::~cGame(void)
 {
 }
 
+bool cGame::isVisible(int x)
+{
+	cScene cScene;
+	int offset = 20;
+	if(x < GAME_WIDTH+cScene.velocitat+offset && x > cScene.velocitat - 500 ) return true;
+	else return false;
+}
+
 bool cGame::Init()
 {
 	bool res=true;
@@ -66,10 +74,14 @@ bool cGame::Init()
 	}
 	else {
 		if(level == 1) {
+			
+
 			res = generateEnemies(1);
 			if(!res) return false;
 		}
 		else if(level == 2) {
+			
+
 			res = generateEnemies(2);
 			if(!res) return false;
 		}
@@ -97,8 +109,15 @@ bool cGame::Init()
 	
 	if(!res) return false;
 
-	//Projectil iniatilation
+	//Projectil initialization
 	res = Data.LoadImage(IMG_MISSILE, "img/nau-alpha.png", GL_RGBA);
+	if(!res) return false;
+
+	//Enemies initialization
+	res = Data.LoadImage(IMG_ENEMY1,"img/enemies/enemy1.png",GL_RGBA);
+	if(!res) return false;
+
+	res = Data.LoadImage(IMG_ENEMY2,"img/enemies/enemy2.png",GL_RGBA);
 	if(!res) return false;
 
 	if(level > 0) {
@@ -155,8 +174,6 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	
-
 	if (!Player.isAdvancing) {
 
 		if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
@@ -207,19 +224,42 @@ bool cGame::Process()
 		}
 	}
 	
-	//Game Logic
-	//Player.Logic(Scene.GetMap());
+	// MISSILES
 	for (int i = 0; i < NUM_MISSILES; ++i) {
 		if (projectils[i].getActive()) {
 			if (projectils[i].canMove()) {
 				int x, y;
 
 				projectils[i].getPosition(&x, &y);
-				x = x + SPEED_PROJ;
-				if (!projectils[i].isCollision(&Scene.map)) {
-					projectils[i].setPosition(x, y);
+				if(!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
+				else {
+					x = x + SPEED_PROJ;
+					if (!projectils[i].isCollision(&Scene.map)) {
+						projectils[i].setPosition(x, y);
+					}
+					else projectils[i].setActive(false);
 				}
-				else projectils[i].setActive(false);
+			}
+		}
+	}
+
+	// ENEMIES
+	for (int i = 0; i < NUM_ENEMIES; ++i) {
+		if(!enemies[i].isDead()) {
+			if(1) {	// can move?
+				int x, y;
+				enemies[i].getPosXY(&x, &y);
+				if(!this->isVisible(x)) {}
+				else {
+					if(enemies[i].getType() == 1) {
+						x -= SPEED_ENEMY1;
+						enemies[i].setPosXY(x, y);
+					}
+					else if(enemies[i].getType() == 2) {
+						x -= SPEED_ENEMY2;
+						enemies[i].setPosXY(x, y);
+					}
+				}
 			}
 		}
 	}
@@ -315,6 +355,24 @@ void cGame::RenderGUI()
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 }
 
+void cGame::RenderEnemies(int id1, int id2)
+{
+	for(int i = 0; i < NUM_ENEMIES; ++i) {
+		if(!enemies[i].isDead()) {
+			int x, y;
+			enemies[i].getPosXY(&x, &y);
+			if(this->isVisible(x)) {	// draw only if alive and visible
+				if(enemies[i].getType() == 1) {
+					enemies[i].Draw(id1);
+				}
+				else if(enemies[i].getType() == 2) {
+					enemies[i].Draw(id2);
+				}
+			}
+		}
+	}
+}
+
 //Output
 void cGame::Render()
 {
@@ -336,6 +394,7 @@ void cGame::Render()
 		Player.Advance();
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		RenderProjectils(Data.GetID(IMG_MISSILE));
+		RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2));
 
 		RenderGUI();
 
@@ -817,11 +876,6 @@ int getInfoMonster(FILE *fd)
 	return e;
 }
 
-void cGame::RenderEnemies(int textID)
-{
-
-}
-
 bool cGame::generateEnemies(int level)
 {
 	bool res = true;
@@ -846,19 +900,18 @@ bool cGame::generateEnemies(int level)
 		cEnemy enemy(x, y, type);
 		if(type == 1) {
 			enemy.setType(1);
+			enemy.setWidthHeight(33*1.2,25*1.2);
 			enemy.setLife(LIFE_ENEMY_1);
-			enemy.setWidthHeight(20,20);
+			
 		}
 		else if(type == 2) {
 			enemy.setType(2);
+			enemy.setWidthHeight(34*2.0,26*2.0);
 			enemy.setLife(LIFE_ENEMY_2);
-			enemy.setWidthHeight(40,40);
 		}
 		enemies[i] = enemy;
 
 	}
-	int a = 0;
-
 	return res;
 }
 

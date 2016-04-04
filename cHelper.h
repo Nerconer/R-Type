@@ -1,6 +1,7 @@
-#include "Globals.h"
-
 #pragma once
+#include "Globals.h"
+#include "cScene.h"
+#include "cGame.h"
 
 #define TILE_SIZE		16
 #define BLOCK_SIZE		16
