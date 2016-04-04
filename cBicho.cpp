@@ -144,39 +144,33 @@ void cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 	cScene cScene;
 	int limit = cScene.velocitat;
 	if ((x - STEP_LENGTH) > limit) {
-		if ((x % TILE_SIZE) == 0)
-		{
-			int xaux = x;
-			x -= STEP_LENGTH;
+		int xaux = x;
+		x -= STEP_LENGTH;
 
-			if (CollidesMapWall(map, false))
-			{
-				x = xaux;
-				state = STATE_LOOKRIGHT;
-			}
+		if (CollidesMapWall(map, false))
+		{
+			x = xaux;
+			state = STATE_LOOKRIGHT;
 		}
-		else  x -= STEP_LENGTH;
+		
 	}
 }
 void cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	cScene Scene;
-	int limit = Scene.velocitat + 640;
+	int limit = Scene.velocitat + 640 - w;
 
-//	if ((x + STEP_LENGTH) < limit) {
-		if ((x % TILE_SIZE) == 0)
+	if ((x + STEP_LENGTH) < limit) {
+		int xaux = x;
+		x += STEP_LENGTH;
+
+		if (CollidesMapWall(map, true))
 		{
-			int xaux = x;
-			x += STEP_LENGTH;
-
-			if (CollidesMapWall(map, true))
-			{
-				x = xaux;
-				state = STATE_LOOKRIGHT;
-			}
+			x = xaux;
+			state = STATE_LOOKRIGHT;
 		}
-		else x += STEP_LENGTH;
-	//}
+		
+	}
 }
 
 

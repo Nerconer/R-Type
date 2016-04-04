@@ -76,6 +76,8 @@ bool cGame::Init()
 	}
 
 	startTimeProj = 0;
+	lastArrowTime = 0;
+
 
 	Player.SetWidthHeight(48,11*2);
 
@@ -153,15 +155,18 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	//Player.Advance();
+	
 
-	if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
-	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
-	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
-	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
-	else {
-		Player.Stop();
-		Player.Advance();
+	if (!Player.isAdvancing) {
+
+		if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
+		else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
+		else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
+		else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
+		else {
+			Player.Stop();
+			
+		}
 	}
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
@@ -328,7 +333,7 @@ void cGame::Render()
 			Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
 			Scene.Draw(Data.GetID(IMG_TILES_002));
 		}
-		//Player.Advance();
+		Player.Advance();
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		RenderProjectils(Data.GetID(IMG_MISSILE));
 

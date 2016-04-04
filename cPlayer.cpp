@@ -5,6 +5,7 @@ cPlayer::cPlayer() {
 	posTexture p;
 	textSeq = vector<posTexture>(5);
 
+	isAdvancing = false;
 	steps = 0;
 
 	//STATE_LOOKRIGHT
@@ -163,6 +164,7 @@ void cPlayer::Shoot(int type)
 
 void cPlayer::Advance()
 {
+	isAdvancing = true;
 	cScene Scene;
 	int xold = x;
 	bool advance = true;
@@ -175,6 +177,7 @@ void cPlayer::Advance()
 		}
 	}
 	if (advance) steps += 0.5;
+	isAdvancing = false;
 }
 
 int cPlayer::getLives()

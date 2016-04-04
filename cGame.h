@@ -77,6 +77,7 @@ private:
 	cProjectil projectils[NUM_MISSILES];
 	bool buttonA;
 	int startTimeProj;
+	int lastArrowTime;
 	int timeButtonAInitial;
 	int timeButtonAFinal;
 	int level;
