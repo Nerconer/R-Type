@@ -24,9 +24,11 @@ public:
 	void Advance();
 
 	int getLives();
+	bool isAdvancing;
 
 private:
 	int lives;
 	float steps;
+	
 
 };

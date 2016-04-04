@@ -154,7 +154,6 @@ bool cProjectil::isCollision(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]) {
 	width_tiles = w / TILE_SIZE;
 	height_tiles = h / TILE_SIZE;
 	if (width_tiles == 0) width_tiles = 2;
-	else width_tiles *= 2;
 	if (height_tiles == 0) height_tiles = 1;
 
 	tile_x += width_tiles;

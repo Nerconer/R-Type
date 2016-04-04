@@ -187,7 +187,7 @@ void cScene::DrawBackground(int tex_id)
 	float limit = TILE_SIZE*SCENE_WIDTH - 640;
 	//Limite del nivel
 	//Loop Infinito de Fondo
-	if (velocitat <= limit) velocitatBackground += 0.2;
+	if (velocitat <= limit) velocitatBackground += 0.3;
 	glDisable(GL_TEXTURE_2D);
 
 
