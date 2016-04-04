@@ -233,8 +233,8 @@ bool cGame::Process()
 				projectils[i].getPosition(&x, &y);
 				if(!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
 				else {
-					x = x + SPEED_PROJ;
 					if (!projectils[i].isCollision(&Scene.map)) {
+						x = x + SPEED_PROJ;
 						projectils[i].setPosition(x, y);
 					}
 					else projectils[i].setActive(false);
@@ -376,7 +376,7 @@ void cGame::RenderEnemies(int id1, int id2)
 //Output
 void cGame::Render()
 {
-	if (level != 0) {
+	//if (level != 0) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -399,7 +399,7 @@ void cGame::Render()
 		RenderGUI();
 
 		glutSwapBuffers();
-	}
+	//}
 }
 
 void cGame::ActivateProjectil(int x, int y, int type)
