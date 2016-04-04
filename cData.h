@@ -23,7 +23,7 @@
 
 /*
 #define IMG_ENEMY1	2
-#define IMG_ENEMY2	3
+//#define IMG_ENEMY2	3
 #define IMG_SHOOT	4
 ...
 */

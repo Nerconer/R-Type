@@ -233,8 +233,8 @@ bool cGame::Process()
 				projectils[i].getPosition(&x, &y);
 				if(!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
 				else {
-					x = x + SPEED_PROJ;
 					if (!projectils[i].isCollision(&Scene.map)) {
+						x = x + SPEED_PROJ;
 						projectils[i].setPosition(x, y);
 					}
 					else projectils[i].setActive(false);
