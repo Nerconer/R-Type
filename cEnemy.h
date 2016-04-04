@@ -13,6 +13,9 @@
 #define IMG_WIDTH_ENEMY2 398
 #define IMG_HEIGHT_ENEMY2 100
 
+#define TIME_BETWEEN_SHOOTS_EN1 300
+#define TIME_BETWEEN_SHOOTS_EN1 500
+
 #define ENEMY1_TRANSITION_SPEED 8
 
 class cEnemy
@@ -47,6 +50,7 @@ protected:
 	int type; // enemy type
 	int animAct;	// state of the animation
 	int delayAnim;
+	int lastShot;
 
 	vector<posTexture> seqEnemy;
 };
