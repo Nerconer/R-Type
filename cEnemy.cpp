@@ -11,8 +11,9 @@ cEnemy::cEnemy(int x, int y, int type)
 	this->y = y;
 	this->type = type;
 	this->dead = false;
-	animAct = 0;
-	delayAnim = 0;
+	this->animAct = 0;
+	this->delayAnim = 0;
+	this->lastShot = 0;
 }
 
 bool cEnemy::isDead()
