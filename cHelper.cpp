@@ -47,3 +47,4 @@ void cHelper::getWandW(int* w, int* h)
 	(*w) = cHelper::w_tile;
 	(*h) = cHelper::h_tile;
 }
+
