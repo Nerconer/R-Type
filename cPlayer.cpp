@@ -164,20 +164,21 @@ void cPlayer::Shoot(int type)
 
 void cPlayer::Advance()
 {
-	isAdvancing = true;
+
 	cScene Scene;
-	int xold = x;
-	bool advance = true;
-	if (steps >= 1) {
-		steps = 0;
-		x += 1;
-		if (CollidesMapWall(&Scene.map, true)) {
-			x = xold;
-			advance = false;
+	if (Scene.velocitat < (SCENE_WIDTH*TILE_SIZE - 640)) {
+		int xold = x;
+		bool advance = true;
+		if (steps >= 1) {
+			steps = 0;
+			x += 1;
+			if (CollidesMapWall(&Scene.map, true)) {
+				x = xold;
+				advance = false;
+			}
 		}
+		if (advance) steps += 0.5;
 	}
-	if (advance) steps += 0.5;
-	isAdvancing = false;
 }
 
 int cPlayer::getLives()

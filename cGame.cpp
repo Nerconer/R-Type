@@ -318,7 +318,7 @@ void cGame::RenderGUI()
 //Output
 void cGame::Render()
 {
-	if (level != 0) {
+	//if (level != 0) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -340,7 +340,7 @@ void cGame::Render()
 		RenderGUI();
 
 		glutSwapBuffers();
-	}
+	//}
 }
 
 void cGame::ActivateProjectil(int x, int y, int type)
