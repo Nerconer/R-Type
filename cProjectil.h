@@ -1,5 +1,6 @@
 #include "cPlayer.h"
 #include "cScene.h"
+#include "cEnemy.h"
 
 
 #pragma once

@@ -66,10 +66,12 @@ bool cGame::Init()
 	}
 	else {
 		if(level == 1) {
-		
+			res = generateEnemies(1);
+			if(!res) return false;
 		}
 		else if(level == 2) {
-		
+			res = generateEnemies(2);
+			if(!res) return false;
 		}
 	}
 
@@ -166,7 +168,7 @@ bool cGame::Process()
 		int x,y;
 		Player.GetPosition(&x,&y);
 		startTimeProj = glutGet(GLUT_ELAPSED_TIME);
-		activateProjectil(x,y,0);
+		ActivateProjectil(x,y,0);
 		Player.Shoot(0);
 	}
 
@@ -186,15 +188,15 @@ bool cGame::Process()
 			int diff = timeButtonAFinal - timeButtonAInitial;
 			Player.GetPosition(&x,&y);
 			if(diff > 0 && diff < TIME_MEDIUM_SHOT) {
-				activateProjectil(x,y,0);
+				ActivateProjectil(x,y,0);
 				Player.Shoot(0);
 			}
 			else if(diff > TIME_MEDIUM_SHOT && diff < TIME_STRONG_SHOT) { // atac semi fort
-				activateProjectil(x,y,1);
+				ActivateProjectil(x,y,1);
 				Player.Shoot(1);
 			}
 			else {	// atac fort
-				activateProjectil(x,y,2);
+				ActivateProjectil(x,y,2);
 				Player.Shoot(2);
 			}
 		}
@@ -328,7 +330,7 @@ void cGame::Render()
 		}
 		//Player.Advance();
 		Player.Draw(Data.GetID(IMG_PLAYER));
-		renderProjectils(Data.GetID(IMG_MISSILE));
+		RenderProjectils(Data.GetID(IMG_MISSILE));
 
 		RenderGUI();
 
@@ -336,21 +338,21 @@ void cGame::Render()
 	}
 }
 
-void cGame::activateProjectil(int x, int y, int type)
+void cGame::ActivateProjectil(int x, int y, int type)
 {
 	bool found = false;
 
 	for(int i = 0; i < NUM_MISSILES && !found; ++i) {
 		if(!projectils[i].getActive()) { // posicio disponible
 			projectils[i].setActive(true);
-			projectils[i].setType(type);	// TEMPORAL
+			projectils[i].setType(type);	
 			projectils[i].setPosition(x,y);
 			found = true;
 		}
 	}
 }
 
-void cGame::renderProjectils(int textId)
+void cGame::RenderProjectils(int textId)
 {
 	for(int i = 0; i < NUM_MISSILES; ++i) {
 		if(projectils[i].getActive()) {
@@ -795,6 +797,64 @@ void cGame::RenderMenu()
 		glDisable(GL_TEXTURE_2D);
 		glutSwapBuffers();
 	}
+}
+
+int getInfoMonster(FILE *fd)
+{
+	int e = 0;
+	char c;
+	fscanf(fd,"%c",&c);
+	while(c != ' ') {
+		e = e * 10;
+		e += (c - 48);
+		fscanf(fd,"%c",&c);
+	}
+	return e;
+}
+
+void cGame::RenderEnemies(int textID)
+{
+
+}
+
+bool cGame::generateEnemies(int level)
+{
+	bool res = true;
+	FILE *fd;
+	int x, y, type;
+	char c;
+
+	if(this->level == 1)
+		fd=fopen("txt/enemiesLVL1.txt","r");
+	else if(this->level == 2)
+		fd=fopen("txt/enemiesLVL2.txt","r");
+	//if(fd==NULL) return false;
+
+	for(int i = 0; i < NUM_ENEMIES; ++i) {
+		x = 0, y = 0, type = 0;
+		x = getInfoMonster(fd);
+		y = getInfoMonster(fd);
+		type = getInfoMonster(fd);
+
+		fscanf(fd,"%c",&c); //pass enter
+
+		cEnemy enemy(x, y, type);
+		if(type == 1) {
+			enemy.setType(1);
+			enemy.setLife(LIFE_ENEMY_1);
+			enemy.setWidthHeight(20,20);
+		}
+		else if(type == 2) {
+			enemy.setType(2);
+			enemy.setLife(LIFE_ENEMY_2);
+			enemy.setWidthHeight(40,40);
+		}
+		enemies[i] = enemy;
+
+	}
+	int a = 0;
+
+	return res;
 }
 
 cPlayer cGame::getPlayer() {

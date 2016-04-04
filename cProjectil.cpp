@@ -58,9 +58,9 @@ int cProjectil::getType()
 void cProjectil::setType(int type)
 {
 	this->type = type;
-	if(type == 0) this->damage = 100;
-	else if(type == 1) this->damage = 300;
-	else if(type == 2) this->damage = 1500;
+	if(type == 0) this->damage = LIFE_ENEMY_1;
+	else if(type == 1) this->damage = LIFE_ENEMY_1 * 3;
+	else if(type == 2) this->damage = LIFE_ENEMY_1 * 15;
 }
 
 void cProjectil::getPosition(int *posx, int *posy)

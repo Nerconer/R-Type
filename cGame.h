@@ -5,6 +5,7 @@
 #include "cData.h"
 #include "cProjectil.h"
 #include "cMenu.h"
+#include "cEnemy.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -12,7 +13,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 252
-#define NUM_ENEMIES 128
+#define NUM_ENEMIES 2
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -49,9 +50,11 @@ public:
 
 	void RenderGUI();
 
-	void activateProjectil(int x, int y, int type);
+	void ActivateProjectil(int x, int y, int type);
 
-	void renderProjectils(int textId);
+	void RenderProjectils(int textId);
+
+	void RenderEnemies(int textID);
 
 	void RenderMenu();
 
@@ -60,6 +63,8 @@ public:
 	void selectLevel();
 
 	void pintaNauMenu(int id, int id1);
+
+	bool generateEnemies(int level);
 
 	cPlayer getPlayer();
 
@@ -92,6 +97,8 @@ private:
 
 	int engineAnimMenu;
 	int delayEngineAnimMenu;
+
+	cEnemy enemies[NUM_ENEMIES];
 
 	
 };
