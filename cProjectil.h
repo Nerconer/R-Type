@@ -57,9 +57,13 @@ public:
 
 	void setDimensions(int w, int h);
 
+	void GetArea(cRect * rc);
+
 	bool canMove();
 
 	bool isCollision(int (*map)[SCENE_HEIGHT][SCENE_WIDTH]);
+
+	bool Collapsed(int x, int y);
 
 private:
 	bool active;

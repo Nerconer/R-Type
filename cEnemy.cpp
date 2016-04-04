@@ -59,6 +59,44 @@ void cEnemy::setLife(int life)
 	this->life = life;
 }
 
+boolean cEnemy::isCollision(int x, int y) {
+
+	int bottom, top, right, left;
+
+	right = this->x + w;
+	left = this->x;
+	top = this->y;
+	bottom = this->y + h;
+
+	if (x <= right && x >= left)
+		if (y >= top && y <= bottom) return true;
+
+	return false;
+
+
+}
+
+
+void cEnemy::GetArea(cRect *rc)
+{
+	(*rc).left = x;
+	(*rc).right = x + w;
+	(*rc).bottom = y;
+	(*rc).top = y + h;
+}
+
+bool cEnemy::Collides(cRect *rc)
+{
+
+	int bottom = y + h;
+	int top = y;
+	int right = x + w;
+	int left = x;
+
+	return (rc->left >= left) && (rc->right <= right);
+}
+
+
 void cEnemy::setType(int type)
 {
 	this->type = type;

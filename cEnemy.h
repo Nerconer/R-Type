@@ -3,6 +3,7 @@
 #include "cTexture.h"
 #include "Globals.h"
 #include "posTexture.h"
+#include "cBicho.h"
 
 #define LIFE_ENEMY_1 100
 #define LIFE_ENEMY_2 500
@@ -20,6 +21,7 @@
 
 class cEnemy
 {
+
 public:
 	cEnemy(void);
 	cEnemy(int x, int y, int type);
@@ -41,6 +43,12 @@ public:
 	int getType();
 
 	void Draw(int idText);
+
+	boolean isCollision(int x, int y);
+
+	void GetArea(cRect * rc);
+
+	bool Collides(cRect * rc);
 
 protected:
 	int life;

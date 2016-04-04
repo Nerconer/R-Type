@@ -15,6 +15,14 @@ void cProjectil::setDimensions(int w, int h) {
 
 }
 
+void cProjectil::GetArea(cRect *rc)
+{
+	(*rc).left = x;
+	(*rc).right = x + w;
+	(*rc).bottom = y;
+	(*rc).top = y + h;
+}
+
 bool cProjectil::canMove() {
 	if (delay == 2) {
 		delay = 0;
@@ -22,6 +30,17 @@ bool cProjectil::canMove() {
 	}
 	++delay;
 	return false;
+}
+
+bool cProjectil::Collapsed(int x, int y) {
+
+	cRect Rect;
+	GetArea(&Rect);
+	if (Rect.left <= x && Rect.right >= x) {
+		return true;
+	}
+	return false;
+
 }
 
 
