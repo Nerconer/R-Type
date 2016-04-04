@@ -238,9 +238,9 @@ bool cGame::Process()
 						projectils[i].setPosition(x, y);
 						for (int j = 0; j < NUM_ENEMIES; ++j) {
 							if (!enemies[j].isDead()) {
-								int xenemy, yenemy;
-								enemies[j].getPosXY(&xenemy, &yenemy);
-								if (projectils[i].Collapsed(xenemy, yenemy)) {
+								cRect cRect;
+								projectils[i].GetArea(&cRect);
+								if (enemies[j].Collides(&cRect)) {
 									enemies[j].setDead(true);
 									projectils[i].setActive(false);
 

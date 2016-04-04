@@ -87,13 +87,25 @@ void cEnemy::GetArea(cRect *rc)
 
 bool cEnemy::Collides(cRect *rc)
 {
+	int left, rigth, top, bottom;
+	switch (this->type) {
+	case 1:
+		bottom = y;
+		rigth = w + x;
+		top = y + h;
+		left = x;
+		break;
+	case 2:
+		bottom = y - h;
+		rigth = w + x;
+		top = y;
+		left = x;
+		break;
 
-	int bottom = y + h;
-	int top = y;
-	int right = x + w;
-	int left = x;
 
-	return (rc->left >= left) && (rc->right <= right);
+
+	}
+	return (rc->left < rigth) && (left < rc->right) && (rc->bottom < top) && (bottom < rc->top);
 }
 
 
