@@ -205,15 +205,39 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	if(Player.getLives() == -1) {
+	if(Player.getLives() < 0) {
 		// GAME OVER
-		//return true;
+		/*PlaySound(NULL,NULL,0);
+		if(keys[KEY_INTRO]) {
+			this->menuAnimation = true;
+			this->blinkAnim = true;
+			this->level = 0;
+			//Player.setLives(3);
+			
+		}
+		cScene Scene;
+		Scene.velocitat -= 0.5;
+		Scene.velocitatBackground -= 0.3;
+		return true;*/
 	}
 	if(Boss.getLife() <= 0) {
 		// WIN
 		res = PlaySound(TEXT("sound/win.wav"),NULL,SND_LOOP |SND_ASYNC);
 		if (res == false) return res;
-		// RESET dades del nivell
+		if(!this->bossDead) {
+			this->bossDead = true;
+			PlaySound(NULL,NULL,0);
+			mciSendString("close all", NULL, 0, NULL);
+			mciSendString("play sound/win.wav",NULL,0,NULL);
+			// RESET dades del nivell
+		}
+		if(keys[KEY_INTRO]) {
+			PlaySound(NULL,NULL,0);
+			mciSendString("close all", NULL, 0, NULL);
+
+			this->level = 0;
+			return true;
+		}
 	}
 
 	//Avancem jugador
