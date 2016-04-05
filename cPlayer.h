@@ -24,6 +24,8 @@ public:
 	void Advance();
 
 	int getLives();
+	void setLives(int lives);
+
 	bool isAdvancing;
 
 private:

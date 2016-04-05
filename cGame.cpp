@@ -323,6 +323,7 @@ bool cGame::Process()
 						if (enemies[i].Collides(&cRect)) {
 
 							//Posar que la vida es resti
+							Player.setLives(Player.getLives() - 1);
 							enemies[i].setDead(true);
 						}
 
@@ -335,8 +336,22 @@ bool cGame::Process()
 							enemies[i].setPosXY(x, y);
 						}
 						else if(enemies[i].getType() == 3) {
-							x -= SPEED_ENEMY3;
-							y -= (SPEED_ENEMY3-1);
+							int xPlayer, yPlayer;
+							Player.GetPosition(&xPlayer, &yPlayer);
+							//Seguira al player
+							//L'enemic 3 segueix al Player y acelera quan esta a la seva altura
+							int w, h;
+							enemies[i].getWidthHeight(&w, &h);
+							if (yPlayer == (y - h)) x -= SPEED_ENEMY3;
+							else if (yPlayer > (y - h)) {
+								y += SPEED_ENEMY3 - 1;
+								x -= 1;
+							}
+							else {
+								x -= 1;
+								y -= (SPEED_ENEMY3 - 1);
+							}
+
 							enemies[i].setPosXY(x, y);
 						}
 						
