@@ -312,7 +312,7 @@ bool cGame::Process()
 								if (enemies[j].Collides(&cRect)) {
 									//Enemies life
 									enemies[j].setHurted(true);
-									int life = enemies[i].getLife() - projectils[i].getDamage();
+									int life = enemies[j].getLife() - projectils[i].getDamage();
 									if (life <= 0) {
 										enemies[j].setDead(true);
 									}
