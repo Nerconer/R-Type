@@ -69,6 +69,11 @@ void cProjectil::setDirection(int dir)
 	direction = dir;
 }
 
+int cProjectil::getDamage()
+{
+	return damage;
+}
+
 int cProjectil::getType()
 {
 	return type;

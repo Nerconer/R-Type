@@ -46,6 +46,8 @@ public:
 	int getDirection();
 	void setDirection(int dir);
 
+	int getDamage();
+
 	int getType();
 	void setType(int type);
 

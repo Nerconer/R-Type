@@ -46,6 +46,9 @@ public:
 	void setType(int type);
 	int getType();
 
+	void setHurted(bool hurted);
+	bool getHurted();
+
 	void Draw(int idText);
 
 	boolean isCollision(int x, int y);
@@ -63,6 +66,7 @@ protected:
 	int animAct;	// state of the animation
 	int delayAnim;
 	int lastShot;
+	bool hurted;
 
 	vector<posTexture> seqEnemy;
 };

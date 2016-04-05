@@ -190,6 +190,8 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
+	
+	//Avancem jugador
 	Player.Advance();
 
 
@@ -202,6 +204,7 @@ bool cGame::Process()
 
 			
 	}
+
 	
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
@@ -258,7 +261,13 @@ bool cGame::Process()
 								cRect cRect;
 								projectils[i].GetArea(&cRect);
 								if (enemies[j].Collides(&cRect)) {
-									enemies[j].setDead(true);
+									//Enemies life
+									enemies[j].setHurted(true);
+									int life = enemies[i].getLife() - projectils[i].getDamage();
+									if (life <= 0) {
+										enemies[j].setDead(true);
+									}
+									else enemies[j].setLife(life);
 									projectils[i].setActive(false);
 
 								}
@@ -283,6 +292,15 @@ bool cGame::Process()
 						enemies[i].setDead(true);
 					}
 					else {
+						//Comprova si el jugador a xocat
+						cRect cRect;
+						Player.GetArea(&cRect);
+						if (enemies[i].Collides(&cRect)) {
+
+							//Posar que la vida es resti
+							enemies[i].setDead(true);
+						}
+
 						if(enemies[i].getType() == 1) {
 							x -= SPEED_ENEMY1;
 							enemies[i].setPosXY(x, y);
@@ -296,11 +314,8 @@ bool cGame::Process()
 							y -= (SPEED_ENEMY3-1);
 							enemies[i].setPosXY(x, y);
 						}
+						
 					}
-				//}
-				//else {
-
-				//}
 			}
 		}
 	}
