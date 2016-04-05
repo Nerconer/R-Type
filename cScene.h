@@ -2,7 +2,7 @@
 
 #include "cTexture.h"
 
-#define SCENE_WIDTH		300
+#define SCENE_WIDTH		200
 #define SCENE_HEIGHT	30
 
 #define FILENAME		"level"
