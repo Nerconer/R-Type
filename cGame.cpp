@@ -24,6 +24,8 @@ cGame::cGame(void)
 
 	engineAnimMenu = 0;
 	delayEngineAnimMenu = 0;
+
+	bossDead = false;
 }
 
 cGame::~cGame(void)
@@ -40,7 +42,7 @@ bool cGame::isVisible(int x)
 }
 
 bool cGame::isVisibleLeft(int x) {
-	return !((x) < Scene.velocitat);
+	return !((x) < Scene.velocitat-50);
 }
 
 bool cGame::Init()
@@ -80,7 +82,7 @@ bool cGame::Init()
 	else {
 		if(level == 1) {
 			
-
+			
 			res = generateEnemies(1);
 			if(!res) return false;
 		}
@@ -135,10 +137,16 @@ bool cGame::Init()
 	else if(level == 1) {
 		res = PlaySound(TEXT("sound/Stage1.wav"),NULL,SND_LOOP |SND_ASYNC);
 		if (res == false) return res;
+
+		res = Data.LoadImage(IMG_BOSS1,"img/boss1.png",GL_RGBA);
+		if(!res) return false;
 	}
 	else if(level == 2) {
 		res = PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
 		if (res == false) return res;
+
+		res = Data.LoadImage(IMG_BOSS2,"img/boss2.png",GL_RGBA);
+		if(!res) return false;
 	}
 	//Coloca el Jugador
 	Player.SetTile(4,10);
@@ -182,6 +190,13 @@ void cGame::ReadMouse(int button, int state, int x, int y)
 {
 }
 
+void cGame::resetLevel(int level)
+{
+	for(int i = 0; i < NUM_MISSILES; i++) {
+		projectils[i].setActive(false);
+	}
+}
+
 //Process
 bool cGame::Process()
 {
@@ -190,7 +205,17 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	
+	if(Player.getLives() == -1) {
+		// GAME OVER
+		//return true;
+	}
+	if(Boss.getLife() <= 0) {
+		// WIN
+		res = PlaySound(TEXT("sound/win.wav"),NULL,SND_LOOP |SND_ASYNC);
+		if (res == false) return res;
+		// RESET dades del nivell
+	}
+
 	//Avancem jugador
 	Player.Advance();
 
@@ -977,24 +1002,37 @@ bool cGame::generateEnemies(int level)
 
 		fscanf(fd,"%c",&c); //pass enter
 
-		cEnemy enemy(x, y, type);
-		if(type == 1) {
-			enemy.setType(1);
-			enemy.setWidthHeight(33*1.2,25*1.2);
-			enemy.setLife(LIFE_ENEMY_1);
+		if(type == 4) {
+			Boss.setPosXY(x, y);
+			if(this->level == 1) {
+				Boss.setLife(LIFE_BOSS_1);
+				//Boss.setWidthHeight(33*1.2,25*1.2);
+			}
+			else if(this->level == 2) {
+				Boss.setLife(LIFE_BOSS_2);
+				//Boss.setWidthHeight(33*1.2,25*1.2);
+			}
+		}
+		else {
+			cEnemy enemy(x, y, type);
+			if(type == 1) {
+				enemy.setType(1);
+				enemy.setWidthHeight(33*1.2,25*1.2);
+				enemy.setLife(LIFE_ENEMY_1);
 			
+			}
+			else if(type == 2) {
+				enemy.setType(2);
+				enemy.setWidthHeight(34*2.0,26*2.0);
+				enemy.setLife(LIFE_ENEMY_2);
+			}
+			else if(type == 3) {
+				enemy.setType(3);
+				enemy.setWidthHeight(34*2.0,26*2.0);
+				enemy.setLife(LIFE_ENEMY_1);
+			}
+			enemies[i] = enemy;
 		}
-		else if(type == 2) {
-			enemy.setType(2);
-			enemy.setWidthHeight(34*2.0,26*2.0);
-			enemy.setLife(LIFE_ENEMY_2);
-		}
-		else if(type == 3) {
-			enemy.setType(3);
-			enemy.setWidthHeight(34*2.0,26*2.0);
-			enemy.setLife(LIFE_ENEMY_1);
-		}
-		enemies[i] = enemy;
 
 	}
 	fclose(fd);

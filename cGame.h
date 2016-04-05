@@ -6,6 +6,7 @@
 #include "cProjectil.h"
 #include "cMenu.h"
 #include "cEnemy.h"
+#include "cBoss.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -13,7 +14,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 252
-#define NUM_ENEMIES 52
+#define NUM_ENEMIES 56
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -74,6 +75,8 @@ public:
 
 	void RenderEnemies(int id1, int id2, int id3);
 
+	void resetLevel(int level);
+
 	cPlayer getPlayer();
 
 private:
@@ -109,5 +112,7 @@ private:
 
 	cEnemy enemies[NUM_ENEMIES];
 
-	
+	cBoss Boss;
+
+	bool bossDead;
 };
