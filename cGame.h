@@ -28,7 +28,7 @@
 
 #define SPEED_ENEMY1 3
 #define SPEED_ENEMY2 1
-#define SPEED_ENEMY3 2
+#define SPEED_ENEMY3 5
 
 
 class cGame

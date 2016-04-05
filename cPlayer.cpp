@@ -186,3 +186,8 @@ int cPlayer::getLives()
 	return this->lives;
 }
 
+void cPlayer::setLives(int lives)
+{
+	this->lives = lives;
+}
+
