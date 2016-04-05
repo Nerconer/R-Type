@@ -3,6 +3,7 @@
 #include "cTexture.h"
 #include "Globals.h"
 #include "posTexture.h"
+#include "cProjectilEnemic.h"
 #include "cBicho.h"
 
 #define LIFE_ENEMY_1 100
@@ -20,6 +21,8 @@
 #define TIME_BETWEEN_SHOOTS_EN1 300
 #define TIME_BETWEEN_SHOOTS_EN2 500
 #define TIME_BETWEEN_SHOOTS_EN3 400
+
+#define NUM_MISSILES 10
 
 #define ENEMY1_TRANSITION_SPEED 8
 
@@ -57,6 +60,12 @@ public:
 
 	bool Collides(cRect * rc);
 
+	vector<cProjectilEnemic> projectils;
+
+	int getActiveMissiles();
+	void setActiveMissiles(int count);
+
+
 protected:
 	int life;
 	bool dead;
@@ -67,6 +76,9 @@ protected:
 	int delayAnim;
 	int lastShot;
 	bool hurted;
+
+	int activeMissiles;
+
 
 	vector<posTexture> seqEnemy;
 };

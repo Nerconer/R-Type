@@ -327,13 +327,28 @@ bool cGame::Process()
 							enemies[i].setDead(true);
 						}
 
+
 						if(enemies[i].getType() == 1) {
 							x -= SPEED_ENEMY1;
 							enemies[i].setPosXY(x, y);
 						}
+						// En cas de ser jugador 2, cal veure els seus missils
 						else if(enemies[i].getType() == 2) {
 							x -= SPEED_ENEMY2;
 							enemies[i].setPosXY(x, y);
+							int xPlayer, yPlayer;
+							Player.GetPosition(&xPlayer, &yPlayer);
+
+							cEnemy enemy = enemies[i];
+
+							//NUM_MISSILES = 10
+							for (int j = 0; j < 10; ++j) {
+								if (!enemy.projectils[j].getActive()) {
+
+								}
+							}
+							
+
 						}
 						else if(enemies[i].getType() == 3) {
 							int xPlayer, yPlayer;
