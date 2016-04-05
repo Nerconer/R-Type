@@ -101,7 +101,12 @@ bool cEnemy::Collides(cRect *rc)
 		top = y;
 		left = x;
 		break;
-
+	case 3:	// CODI INVENTAT PERQUE PETAVA AL DISPARAR AL NO INICIALITZAR 'right' (david)
+		bottom = y - h;
+		rigth = w + x;
+		top = y;
+		left = x;
+		break;
 
 
 	}
@@ -135,6 +140,14 @@ void cEnemy::setType(int type)
 		p.yf = 27;
 		seqEnemy[0] = p;
 	}
+	else if(this->type == 3) {
+		seqEnemy = vector<posTexture>(1);	// 3 images
+		p.xo = 66;
+		p.xf = 100;
+		p.yo = 0;
+		p.yf = 32;
+		seqEnemy[0] = p;
+	}
 }
 
 int cEnemy::getType()
@@ -166,6 +179,9 @@ void cEnemy::Draw(int idText)
 		}
 		else if(this->type == 2) {
 			if(this->animAct == 6) animAct = 0;
+		}
+		else if(this->type == 3) {
+			if(this->animAct == 3) animAct = 0;
 		}
 	}
 	else this->delayAnim++;
@@ -212,13 +228,29 @@ void cEnemy::Draw(int idText)
 			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w),	y);
 			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w),	(y - h));
 			glTexCoord2f(xo - offset, yf);	glVertex2d(x,		(y - h));
-			
-			
-			
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 	}
+	else if(this->type == 3) {
+		offset /= IMG_WIDTH_ENEMY3;
 
+		xo = this->seqEnemy[0].xo / IMG_WIDTH_ENEMY3;
+		xf = this->seqEnemy[0].xf / IMG_WIDTH_ENEMY3;
+		yo = this->seqEnemy[0].yo / IMG_HEIGHT_ENEMY3;
+		yf = this->seqEnemy[0].yf / IMG_HEIGHT_ENEMY3;
+
+		glLoadIdentity();
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glBindTexture(GL_TEXTURE_2D, idText);
+		glBegin(GL_QUADS);
+			glTexCoord2f(xo - offset, yo);	glVertex2d(x,		y);
+			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w),	y);
+			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w),	(y - h));
+			glTexCoord2f(xo - offset, yf);	glVertex2d(x,		(y - h));
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
 
 }
 

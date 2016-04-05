@@ -13,7 +13,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 252
-#define NUM_ENEMIES 10
+#define NUM_ENEMIES 52
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -28,6 +28,7 @@
 
 #define SPEED_ENEMY1 3
 #define SPEED_ENEMY2 1
+#define SPEED_ENEMY3 2
 
 
 class cGame
@@ -69,7 +70,7 @@ public:
 
 	bool isVisible(int x);
 
-	void RenderEnemies(int id1, int id2);
+	void RenderEnemies(int id1, int id2, int id3);
 
 	cPlayer getPlayer();
 
