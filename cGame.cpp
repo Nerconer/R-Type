@@ -32,11 +32,15 @@ cGame::~cGame(void)
 
 bool cGame::isVisible(int x)
 {
-	cScene cScene;
+	
 	int offset = 20;
 	//if(x < GAME_WIDTH+cScene.velocitat+offset && x > cScene.velocitat - 5000 ) return true;
-	if(x < GAME_WIDTH+cScene.velocitat+offset) return true;
+	if(x < GAME_WIDTH+Scene.velocitat+offset) return true;
 	else return false;
+}
+
+bool cGame::isVisibleLeft(int x) {
+	return !((x) < Scene.velocitat);
 }
 
 bool cGame::Init()
@@ -186,17 +190,19 @@ bool cGame::Process()
 	//Process Input
 	if(keys[27])	res=false;
 
-	if (!Player.isAdvancing) {
+	Player.Advance();
 
-		if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
-		else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
-		else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
-		else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
-		else {
-			Player.Stop();
+
+	if (keys[GLUT_KEY_UP])			Player.MoveUp(&Scene.map);
+	else if (keys[GLUT_KEY_LEFT])	Player.MoveLeft(&Scene.map);
+	else if (keys[GLUT_KEY_RIGHT])	Player.MoveRight(&Scene.map);
+	else if (keys[GLUT_KEY_DOWN])   Player.MoveDown(&Scene.map);
+	else {
+		Player.Stop();
+
 			
-		}
 	}
+	
 	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
 		int x,y;
@@ -272,7 +278,10 @@ bool cGame::Process()
 				//if (!enemies[i].isCollision(&Scene.map)) {
 					int x, y;
 					enemies[i].getPosXY(&x, &y);
-					if(!this->isVisible(x)) {}
+					if (!this->isVisible(x)) {}
+					else if (!isVisibleLeft(x)) {
+						enemies[i].setDead(true);
+					}
 					else {
 						if(enemies[i].getType() == 1) {
 							x -= SPEED_ENEMY1;
@@ -415,7 +424,11 @@ void cGame::Render()
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
+
+
 		glLoadIdentity();
+
+		
 
 		if (level == 2) {
 
@@ -426,10 +439,12 @@ void cGame::Render()
 			Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
 			Scene.Draw(Data.GetID(IMG_TILES_002));
 		}
-		Player.Advance();
+
+
+		RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
 		Player.Draw(Data.GetID(IMG_PLAYER));
 		RenderProjectils(Data.GetID(IMG_MISSILE));
-		RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
+		
 
 		RenderGUI();
 

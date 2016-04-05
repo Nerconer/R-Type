@@ -87,6 +87,7 @@ void cEnemy::GetArea(cRect *rc)
 
 bool cEnemy::Collides(cRect *rc)
 {
+
 	int left, rigth, top, bottom;
 	switch (this->type) {
 	case 1:
@@ -199,15 +200,15 @@ void cEnemy::Draw(int idText)
 		yo = this->seqEnemy[0].yo / IMG_HEIGHT_ENEMY1;
 		yf = this->seqEnemy[0].yf / IMG_HEIGHT_ENEMY1;
 		
-		glLoadIdentity();
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, idText);
 		glBegin(GL_QUADS);
-			glTexCoord2f(xo - offset, yf);	glVertex2d(x,		(y + h));
-			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w),	(y + h));
-			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w),	y);
-			glTexCoord2f(xo - offset, yo);	glVertex2d(x,		y);
+			glTexCoord2f(xo - offset, yf);	glVertex2d(x, y);
+			glTexCoord2f(xo - offset, yo);	glVertex2d(x, y + h);
+			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w),	(y + h));
+			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w),	y);
+			
 		glEnd();
 		glDisable(GL_TEXTURE_2D);		
 	}
@@ -219,7 +220,7 @@ void cEnemy::Draw(int idText)
 		yo = this->seqEnemy[0].yo / IMG_HEIGHT_ENEMY2;
 		yf = this->seqEnemy[0].yf / IMG_HEIGHT_ENEMY2;
 
-		glLoadIdentity();
+		
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, idText);
@@ -239,7 +240,7 @@ void cEnemy::Draw(int idText)
 		yo = this->seqEnemy[0].yo / IMG_HEIGHT_ENEMY3;
 		yf = this->seqEnemy[0].yf / IMG_HEIGHT_ENEMY3;
 
-		glLoadIdentity();
+		
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, idText);

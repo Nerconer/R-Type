@@ -70,6 +70,8 @@ public:
 
 	bool isVisible(int x);
 
+	bool isVisibleLeft(int x);
+
 	void RenderEnemies(int id1, int id2, int id3);
 
 	cPlayer getPlayer();
