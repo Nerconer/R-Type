@@ -102,7 +102,7 @@ bool cEnemy::Collides(cRect *rc)
 		top = y;
 		left = x;
 		break;
-	case 3:	// CODI INVENTAT PERQUE PETAVA AL DISPARAR AL NO INICIALITZAR 'right' (david)
+	default:	// CODI INVENTAT PERQUE PETAVA AL DISPARAR AL NO INICIALITZAR 'right' (david)
 		bottom = y - h;
 		rigth = w + x;
 		top = y;
