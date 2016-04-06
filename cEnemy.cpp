@@ -14,6 +14,10 @@ cEnemy::cEnemy(int x, int y, int type)
 	this->animAct = 0;
 	this->delayAnim = 0;
 	this->lastShot = 0;
+
+	if (type == 2) {
+		projectils = vector<cProjectilEnemic>(NUM_MISSILES);
+	}
 }
 
 bool cEnemy::isDead()
@@ -112,6 +116,16 @@ bool cEnemy::Collides(cRect *rc)
 
 	}
 	return (rc->left < rigth) && (left < rc->right) && (rc->bottom < top) && (bottom < rc->top);
+}
+
+int cEnemy::getActiveMissiles()
+{
+	return activeMissiles;
+}
+
+void cEnemy::setActiveMissiles(int count)
+{
+	activeMissiles = count;
 }
 
 
