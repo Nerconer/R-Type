@@ -128,6 +128,7 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 {
 	int screen_x,screen_y;
 
+
 	screen_x = x;
 	screen_y = y + (BLOCK_SIZE - TILE_SIZE);
 
@@ -146,7 +147,7 @@ void cBicho::DrawRect(int tex_id,float xo,float yo,float xf,float yf)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
+bool cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	cScene cScene;
 	int limit = cScene.velocitat;
@@ -158,11 +159,13 @@ void cBicho::MoveLeft(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 		{
 			x = xaux;
 			state = STATE_LOOKRIGHT;
+			return true;
 		}
 		
 	}
+	return false;
 }
-void cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
+bool cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	cScene Scene;
 	int limit = Scene.velocitat + 640 - w;
@@ -175,13 +178,16 @@ void cBicho::MoveRight(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 		{
 			x = xaux;
 			state = STATE_LOOKRIGHT;
+			return true;
 		}
 		
 	}
+
+	return false;
 }
 
 
-void cBicho::MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
+bool cBicho::MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 	int yaux;
 
@@ -193,8 +199,10 @@ void cBicho::MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 
 		if (CollidesMapFloor(map, false))
 		{
+			
 			y = yaux;
 			state = STATE_LOOKRIGHT;
+			return true;
 		}
 	}
 	//Advance, no problem
@@ -208,6 +216,8 @@ void cBicho::MoveDown(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 			delay = 0;
 		}
 	}
+
+	return false;
 }
 void cBicho::Stop()
 {
@@ -219,7 +229,7 @@ void cBicho::Stop()
 
 //	if (CollidesMapWall(c))
 }
-void cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
+bool cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 {
 
 	int yaux;
@@ -234,6 +244,7 @@ void cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 		{
 			y = yaux;
 			state = STATE_LOOKRIGHT;
+			return true;
 		}
 	}
 	//Advance, no problem
@@ -249,6 +260,7 @@ void cBicho::MoveUp(int (*map)[SCENE_HEIGHT][SCENE_WIDTH])
 		}
 	}
 
+	return false;
 	
 }
 

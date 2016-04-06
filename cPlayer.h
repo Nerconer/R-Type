@@ -28,9 +28,13 @@ public:
 
 	bool isAdvancing;
 
+	bool getIsKilledByRight();
+	void setIsKilledByRight(bool killed);
+
 private:
 	int lives;
 	float steps;
+	bool isKilledByRight;
 	
 
 };

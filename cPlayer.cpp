@@ -2,10 +2,13 @@
 #include "cPlayer.h"
 
 cPlayer::cPlayer() {
+
+
 	posTexture p;
 	textSeq = vector<posTexture>(5);
 
 	isAdvancing = false;
+	isKilledByRight = false;
 	steps = 0;
 
 	//STATE_LOOKRIGHT
@@ -175,6 +178,11 @@ void cPlayer::Advance()
 			if (CollidesMapWall(&Scene.map, true)) {
 				x = xold;
 				advance = false;
+				//Si xoca
+				if (!isKilledByRight) 
+					lives -= 1;
+				//else isKilledByRight = false;
+
 			}
 		}
 		if (advance) steps += 0.5;
@@ -189,5 +197,15 @@ int cPlayer::getLives()
 void cPlayer::setLives(int lives)
 {
 	this->lives = lives;
+}
+
+bool cPlayer::getIsKilledByRight()
+{
+	return isKilledByRight;
+}
+
+void cPlayer::setIsKilledByRight(bool killed)
+{
+	isKilledByRight = killed;
 }
 

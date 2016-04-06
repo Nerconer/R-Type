@@ -13,13 +13,15 @@
 
 #define PANEL_SIZE 50
 
-#define NUM_MISSILES 252
+#define NUM_MISSILES 50
 #define NUM_ENEMIES 50
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
 #define KEY_A_MIN 97
 #define KEY_INTRO 13
+
+#define DELAY_LIVE 2000
 
 #define DELAY_PROJ 200
 #define SPEED_PROJ 32
@@ -121,6 +123,7 @@ private:
 	bool bossDead;
 
 	bool pause;
+	
 
 	bool gameOver;
 };
