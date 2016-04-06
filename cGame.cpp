@@ -37,13 +37,7 @@ cGame::~cGame(void)
 
 bool cGame::isVisible(int x)
 {
-<<<<<<< HEAD
-	
 	int offset = 50;
-=======
-
-	int offset = 20;
->>>>>>> e1f3514e62707e51752d0dc8d390b6c6f3b069c8
 	//if(x < GAME_WIDTH+cScene.velocitat+offset && x > cScene.velocitat - 5000 ) return true;
 	if (x < GAME_WIDTH + Scene.velocitat + offset) return true;
 	else return false;
