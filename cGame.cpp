@@ -871,9 +871,9 @@ void cGame::Render()
 			}
 
 			RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
-			if (!Player.getHurted())
+			//if (Player.getHurted())
 				Player.Draw(Data.GetID(IMG_PLAYER));
-			else Player.setHurted(true);
+			//else Player.setHurted(false);
 			RenderProjectils(Data.GetID(IMG_MISSILE));
 		
 
