@@ -39,5 +39,8 @@ private:
 	bool dirAnim; // true -> esquerra; false -> dreta
 	bool up; // boss 2
 	float numIterUp;
+
+	cProjectilEnemic projectils[10];
+
 };
 

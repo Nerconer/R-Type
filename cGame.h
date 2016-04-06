@@ -14,7 +14,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 50
-#define NUM_ENEMIES 50
+#define NUM_ENEMIES 1
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65

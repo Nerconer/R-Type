@@ -366,12 +366,12 @@ bool cGame::Process()
 	}
 	
 	
-	if (Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
+	if (level != 2 && Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
 
 		LogicBeforeBoss();
 	}
 
-	else LogicWithBoss();
+	if (level == 2) LogicWithBoss();
 
 
 	return res;
@@ -1253,7 +1253,9 @@ bool cGame::generateEnemies(int level)
 	//if(fd==NULL) return false;
 
 	for(int i = 0; i < NUM_ENEMIES; ++i) {
-		x = 0, y = 0, type = 0;
+		
+
+		x = 3000, y = 160, type = 0;
 		x = getInfoMonster(fd);
 		y = getInfoMonster(fd);
 		type = getInfoMonster(fd);
