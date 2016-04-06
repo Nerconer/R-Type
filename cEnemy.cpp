@@ -139,11 +139,6 @@ void cEnemy::setType(int type)
 		p.xf = 268;
 		p.yo = 5;
 		p.yf = 30;
-
-		/*p.xo = 235;
-		p.xf = 257;
-		p.yo = 5;
-		p.yf = 30;*/
 		seqEnemy[0] = p;
 
 	}
@@ -229,11 +224,10 @@ void cEnemy::Draw(int idText)
 			glColor4f(1.0, 1.0, 1.0, 1.0);
 			glBindTexture(GL_TEXTURE_2D, idText);
 			glBegin(GL_QUADS);
-			glTexCoord2f(xo - offset, yf);	glVertex2d(x, y);
-			glTexCoord2f(xo - offset, yo);	glVertex2d(x, y + h);
-			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w), (y + h));
-			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w), y);
-
+				glTexCoord2f(xo - offset, yf);	glVertex2d(x, y);
+				glTexCoord2f(xo - offset, yo);	glVertex2d(x, y + h);
+				glTexCoord2f(xf - offset, yo);	glVertex2d((x + w), (y + h));
+				glTexCoord2f(xf - offset, yf);	glVertex2d((x + w), y);
 			glEnd();
 			glDisable(GL_TEXTURE_2D);
 		}
