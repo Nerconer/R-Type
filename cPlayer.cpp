@@ -7,9 +7,9 @@ cPlayer::cPlayer() {
 	posTexture p;
 	textSeq = vector<posTexture>(5);
 
-	isAdvancing = false;
 	isKilledByRight = false;
 	steps = 0;
+	hurted = true;
 
 	//STATE_LOOKRIGHT
 	/*p.xo = 3.0f;
@@ -133,27 +133,7 @@ void cPlayer::Draw(int tex_id)
 		}
 	}
 
-	/*switch(GetState())
-	{
-		//1
-		case STATE_LOOKLEFT:	xo = 0.2f;	yo = 0.008f;
-								break;
-		//4
-		case STATE_LOOKRIGHT:	xo = 0.2f;	yo = 0.008f;
-								break;
-		//1..3
-		case STATE_WALKLEFT:	xo = 0.2f;	yo = 0.008f;
-								//NextFrame(3);
-								break;
-		//4..6
-		case STATE_WALKRIGHT:	xo = 0.2f;	yo = 0.008f;
-								//NextFrame(3);
-								break;
-	}*/
-	//xf = xo + 0.045f;
-	//yf = yo + 0.040f;
 
-	//DrawRect(tex_id,xo,yo,xf,yf);
 	DrawRect(tex_id,p.xo/ IMG_WIDTH_PLAYER,p.yo/ IMG_HEIGHT_PLAYER,p.xf/ IMG_WIDTH_PLAYER,p.yf/ IMG_HEIGHT_PLAYER);
 }
 
@@ -194,9 +174,18 @@ int cPlayer::getLives()
 	return this->lives;
 }
 
+
 void cPlayer::setLives(int lives)
 {
+	if (this->lives < lives) hurted = true;
 	this->lives = lives;
+}
+
+bool cPlayer::getHurted() {
+	return hurted;
+}
+void cPlayer::setHurted(bool hurted) {
+	this->hurted = hurted;
 }
 
 bool cPlayer::getIsKilledByRight()

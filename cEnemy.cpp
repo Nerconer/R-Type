@@ -15,7 +15,7 @@ cEnemy::cEnemy(int x, int y, int type)
 	this->delayAnim = 0;
 	this->lastShot = 0;
 
-	if (type == 2) {
+	if (type == 2 || type == 4) {
 		projectils = vector<cProjectilEnemic>(NUM_MISSILES);
 	}
 }
