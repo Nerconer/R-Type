@@ -6,17 +6,17 @@
 #pragma once
 
 //Mesures tipo
-#define x0 134
-#define x1 144
-#define y0 4
-#define y1 13
+#define x0 0
+#define x1 33
+#define y0 0
+#define y1 31
 
 
 
 
 //La imatge es img/nau_alpha.png
-#define IMG_WIDTH 400
-#define IMG_HEIGHT 85
+#define IMG_WIDTH 33
+#define IMG_HEIGHT 31
 
 
 class cProjectilEnemic
