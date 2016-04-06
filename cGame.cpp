@@ -266,7 +266,7 @@ bool cGame::Process()
 
 	Player.GetPosition(&x, &y);
 
-	if (!isVisibleLeft(x)) Player.setLives(0);
+	if (!isVisibleLeft(x)) Player.setLives(-1);
 
 	if(Player.getLives() < 0) {
 		// GAME OVER
