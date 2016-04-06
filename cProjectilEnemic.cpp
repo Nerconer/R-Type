@@ -1,6 +1,4 @@
 #include "cProjectilEnemic.h"
-#include "cTexture.h"
-#include "cGame.h"
 
 
 cProjectilEnemic::cProjectilEnemic(void)
@@ -69,6 +67,11 @@ void cProjectilEnemic::setDirection(int dir)
 	direction = dir;
 }
 
+void cProjectilEnemic::setDamage(int damage)
+{
+	this->damage = damage;
+}
+
 int cProjectilEnemic::getDamage()
 {
 	return damage;
@@ -81,10 +84,10 @@ int cProjectilEnemic::getType()
 
 void cProjectilEnemic::setType(int type)
 {
-	this->type = type;
-	if (type == 0) this->damage = LIFE_ENEMY_1;
-	else if (type == 1) this->damage = LIFE_ENEMY_1 * 3;
-	else if (type == 2) this->damage = LIFE_ENEMY_1 * 15;
+	//this->type = type;
+	//if (type == 0) this->damage = LIFE_ENEMY_1;
+	//else if (type == 1) this->damage = LIFE_ENEMY_1 * 3;
+//	else if (type == 2) this->damage = LIFE_ENEMY_1 * 15;
 }
 
 void cProjectilEnemic::getPosition(int *posx, int *posy)
@@ -108,11 +111,11 @@ void cProjectilEnemic::DrawRect(int tex_id)
 
 	int screen_x, screen_y;
 
-	int xo = x0 / IMG_WIDTH;
-	int xf = x1 / IMG_WIDTH;
+	float xo = float(134) / IMG_WIDTH;
+	float xf = float(144) / IMG_WIDTH;
 
-	int yo = y0 / IMG_HEIGHT;
-	int yf = y1 / IMG_HEIGHT;
+	float yo = float(4) / IMG_HEIGHT;
+	float yf = float(13) / IMG_HEIGHT;
 
 
 	screen_x = posx;

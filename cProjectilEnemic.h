@@ -1,6 +1,6 @@
 #include "cPlayer.h"
 #include "cScene.h"
-#include "cEnemy.h"
+#include "cBicho.h"
 
 
 #pragma once
@@ -31,6 +31,7 @@ public:
 	int getDirection();
 	void setDirection(int dir);
 
+	void setDamage(int damage);
 	int getDamage();
 
 	int getType();
