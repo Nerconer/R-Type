@@ -118,16 +118,11 @@ void cBoss::Draw1(int id)
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBindTexture(GL_TEXTURE_2D, id);
 		glBegin(GL_QUADS);
-			/*glTexCoord2f(xo - offset, yf);	glVertex2d(x, y);
-			glTexCoord2f(xo - offset, yo);	glVertex2d(x, y + h);
-			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w), (y + h));
-			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w), y);*/
-			
-			glTexCoord2f(xo - offset, yf);	glVertex2d(150, 115 + this->numIterUp);
-			glTexCoord2f(xo - offset, yo);	glVertex2d(150, 115 + h + this->numIterUp);
-			glTexCoord2f(xf - offset, yo);	glVertex2d((150 + w), (115 + h + this->numIterUp));
-			glTexCoord2f(xf - offset, yf);	glVertex2d((150 + w), 115 + this->numIterUp);
-		glEnd();
+			glTexCoord2f(xo - offset, yf);	glVertex2d(x, y - h);
+			glTexCoord2f(xo - offset, yo);	glVertex2d(x, y);
+			glTexCoord2f(xf - offset, yo);	glVertex2d((x + w), (y));
+			glTexCoord2f(xf - offset, yf);	glVertex2d((x + w), y - h);
+			glEnd();
 		glDisable(GL_TEXTURE_2D);
 	}
 
