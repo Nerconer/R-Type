@@ -77,6 +77,10 @@ public:
 
 	void resetLevel(int level);
 
+	void goMenu();
+
+	void RenderGameOver();
+
 	cPlayer getPlayer();
 
 private:
@@ -115,4 +119,8 @@ private:
 	cBoss Boss;
 
 	bool bossDead;
+
+	bool pause;
+
+	bool gameOver;
 };

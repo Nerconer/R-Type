@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 bool buttonA = false; // true -> boto 'A' apretat
-
+int contGameOver = 0;
 cGame::cGame(void)
 {
 	level = 0;
@@ -26,6 +26,9 @@ cGame::cGame(void)
 	delayEngineAnimMenu = 0;
 
 	bossDead = false;
+
+	pause = false;
+	gameOver = false;
 }
 
 cGame::~cGame(void)
@@ -35,7 +38,7 @@ cGame::~cGame(void)
 bool cGame::isVisible(int x)
 {
 	
-	int offset = 20;
+	int offset = 50;
 	//if(x < GAME_WIDTH+cScene.velocitat+offset && x > cScene.velocitat - 5000 ) return true;
 	if(x < GAME_WIDTH+Scene.velocitat+offset) return true;
 	else return false;
@@ -81,14 +84,10 @@ bool cGame::Init()
 	}
 	else {
 		if(level == 1) {
-			
-			
 			res = generateEnemies(1);
 			if(!res) return false;
 		}
 		else if(level == 2) {
-			
-
 			res = generateEnemies(2);
 			if(!res) return false;
 		}
@@ -108,6 +107,8 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_TILES_002, "img/level0/RockTile.png", GL_RGBA);
 	if (!res) return false;
 	res = Data.LoadImage(IMG_SPACE_2, "img/level0/background.png", GL_RGBA);
+	if (!res) return false;
+	res = Data.LoadImage(IMG_GAMEOVER, "img/Game_Over.png", GL_RGBA);
 	if (!res) return false;
 
 	if (level == 2) 
@@ -131,21 +132,24 @@ bool cGame::Init()
 	if(!res) return false;
 
 	if(level == 0) {
-		res = PlaySound(TEXT("sound/Intro.wav"),NULL,SND_LOOP |SND_ASYNC);
-		if (res == false) return res;
+		mciSendString("play sound/Intro.wav",NULL,0,NULL);
+		/*res = PlaySound(TEXT("sound/Intro.wav"),NULL,SND_LOOP |SND_ASYNC);
+		if (res == false) return res;*/
 	}
 	else if(level == 1) {
-		res = PlaySound(TEXT("sound/Stage1.wav"),NULL,SND_LOOP |SND_ASYNC);
-		if (res == false) return res;
+		mciSendString("play sound/Stage1.wav",NULL,0,NULL);
+		/*res = PlaySound(TEXT("sound/Stage1.wav"),NULL,SND_LOOP |SND_ASYNC);
+		if (res == false) return res;*/
 
-		res = Data.LoadImage(IMG_BOSS1,"img/boss1.png",GL_RGBA);
+		res = Data.LoadImage(IMG_BOSS1,"img/enemies/boss1.png",GL_RGBA);
 		if(!res) return false;
 	}
 	else if(level == 2) {
-		res = PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
-		if (res == false) return res;
+		mciSendString("play sound/background-lvl1.wav",NULL,0,NULL);
+		/*res = PlaySound(TEXT("sound/background-lvl1.wav"),NULL,SND_LOOP |SND_ASYNC);
+		if (res == false) return res;*/
 
-		res = Data.LoadImage(IMG_BOSS2,"img/boss2.png",GL_RGBA);
+		res = Data.LoadImage(IMG_BOSS2,"img/enemies/boss2.png",GL_RGBA);
 		if(!res) return false;
 	}
 	//Coloca el Jugador
@@ -163,15 +167,31 @@ bool cGame::Init()
 bool cGame::Loop()
 {
 	bool res=true;
+	
+	if(keys[27]) {
+		keys[27] = false;
+		if(level != 0) pause = !pause;
+		if(level == 1) {
+			if(pause) mciSendString("pause sound/Stage1.wav",NULL,0,NULL);
+			else mciSendString("resume sound/Stage1.wav",NULL,0,NULL);
+		}
+		else if(level == 2) {
+			if(pause) mciSendString("pause sound/background-lvl1.wav",NULL,0,NULL);
+			else mciSendString("resume sound/background-lvl1.wav",NULL,0,NULL);
+		}
+	}
 
-	if(level == 0) res = ProcessMenu();
-	else res = Process();
+	if(!pause) {
+		if(level == 0) res = ProcessMenu();
+		else res = Process();
+	
+		if(res) {
+			if(level == 0) RenderMenu();
+			else  Render();
+			//else if(level == 2) {}
+			//else Render();
+		}
 
-	if(res) {
-		if(level == 0) RenderMenu();
-		else  Render();
-		//else if(level == 2) {}
-		//else Render();
 	}
 	return res;
 }
@@ -197,28 +217,60 @@ void cGame::resetLevel(int level)
 	}
 }
 
+void cGame::goMenu()
+{
+	this->menuAnimation = true;
+	posy1 = -1.6;
+	posy2 = -1.2;
+	this->blinkAnim = true;
+	this->level = 0;
+	loopsBlink = 0;
+
+	delayNauMenu = 0;
+	delayTextMenu = 0;
+
+	oscilation = 0;
+	upMenu = true; // puja
+	delayOscilationMenu = 0;
+
+	engineAnimMenu = 0;
+	delayEngineAnimMenu = 0;
+
+	pause = false;
+	gameOver = false;
+	contGameOver = 0;
+
+	Menu.setNumOptions(4);
+	Menu.setTypeMenu(MENU_PRINCIPAL);
+	Menu.setSO(0);
+
+	Init();
+	cScene Scene;
+	Scene.velocitat = 0;
+	Scene.velocitatBackground = 0;
+}
+
 //Process
 bool cGame::Process()
 {
 	bool res=true;
 	
 	//Process Input
-	if(keys[27])	res=false;
+	//if(keys[27])	res=false;
 
 	if(Player.getLives() < 0) {
 		// GAME OVER
-		/*PlaySound(NULL,NULL,0);
+		gameOver = true;
+		++contGameOver;
+		if(level == 1) mciSendString("stop sound/Stage1.wav",NULL,0,NULL);
+		else if(level == 2) mciSendString("stop sound/Stage1.wav",NULL,0,NULL);
+		if(contGameOver == 1) mciSendString("play sound/gameOver.wav",NULL,0,NULL);
+		else if(contGameOver == 200) mciSendString("stop sound/gameOver.wav",NULL,0,NULL);
 		if(keys[KEY_INTRO]) {
-			this->menuAnimation = true;
-			this->blinkAnim = true;
-			this->level = 0;
-			//Player.setLives(3);
-			
+			mciSendString("stop sound/gameOver.wav",NULL,0,NULL);
+			goMenu();
+			return true;		
 		}
-		cScene Scene;
-		Scene.velocitat -= 0.5;
-		Scene.velocitatBackground -= 0.3;
-		return true;*/
 	}
 	if(Boss.getLife() <= 0) {
 		// WIN
@@ -383,7 +435,20 @@ bool cGame::Process()
 			}
 		}
 	}
-
+	if(level == 2) {
+		int x = Boss.getNumIterUp();
+		bool up = Boss.getUp();
+		if(up && x >= ITERATIONS_UPDOWN) {
+			Boss.setUp(false);
+			Boss.setNumIterUp(x-2);
+		}
+		else if(!up && x <= 0) {
+			Boss.setUp(true);
+			Boss.setNumIterUp(x+2);
+		}
+		else if(up) Boss.setNumIterUp(x+2);
+		else if(!up) Boss.setNumIterUp(x-2);
+	}
 	return res;
 }
 
@@ -477,9 +542,9 @@ void cGame::RenderGUI()
 
 void cGame::RenderEnemies(int id1, int id2, int id3)
 {
+	int x, y;
 	for(int i = 0; i < NUM_ENEMIES; ++i) {
 		if(!enemies[i].isDead()) {
-			int x, y;
 			enemies[i].getPosXY(&x, &y);
 			if(this->isVisible(x)) {	// draw only if alive and visible
 				if(enemies[i].getType() == 1) {
@@ -494,11 +559,51 @@ void cGame::RenderEnemies(int id1, int id2, int id3)
 			}
 		}
 	}
+	Boss.getPosXY(&x, &y);
+	// DESCOMENTAR (TESTING)
+	//if(this->isVisible(x)) {
+		if(level == 1) Boss.Draw1(Data.GetID(IMG_BOSS1));
+		else if(level == 2) Boss.Draw1(Data.GetID(IMG_BOSS2));
+	//}
+}
+
+void cGame::RenderGameOver()
+{
+
+	int id = Data.GetID(IMG_GAMEOVER);
+	posTexture p;
+
+	p.xo = 370.0f / 3508.0f;
+	p.yo = 950.0f / 2480.0f;
+	p.xf = 3165.0f / 3508.0f;
+	p.yf = 1322.0f / 2480.0f;
+
+	float screen_x, screen_y;
+	float w, h;
+
+	w = (3165.0f - 370.0f)*0.25;
+	h = (1322.0f - 950.0f)*0.25;
+	screen_x = 50;
+	screen_y = 350;
+
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf);	glVertex2d(screen_x * 0.8,(screen_y - h) * 0.8);
+		glTexCoord2f(p.xf,p.yf);	glVertex2d((screen_x + w) * 0.8,(screen_y - h) * 0.8);
+		glTexCoord2f(p.xf,p.yo);	glVertex2d((screen_x + w) * 0.8, screen_y * 0.8);
+		glTexCoord2f(p.xo,p.yo);	glVertex2d(screen_x * 0.8, screen_y * 0.8);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }
 
 //Output
 void cGame::Render()
 {
+	//if(level == 0) RenderMenu();
 	if (level != 0) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -508,25 +613,26 @@ void cGame::Render()
 		glLoadIdentity();
 
 		
+		if(!gameOver) {
+			if (level == 2) {
 
-		if (level == 2) {
-
-			Scene.DrawBackground(Data.GetID(IMG_SPACE));
-			Scene.Draw(Data.GetID(IMG_TILES_001));
-		}
-		else {
-			Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
-			Scene.Draw(Data.GetID(IMG_TILES_002));
-		}
+				Scene.DrawBackground(Data.GetID(IMG_SPACE));
+				Scene.Draw(Data.GetID(IMG_TILES_001));
+			}
+			else {
+				Scene.DrawBackground(Data.GetID(IMG_SPACE_2));
+				Scene.Draw(Data.GetID(IMG_TILES_002));
+			}
 
 
-		RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
-		Player.Draw(Data.GetID(IMG_PLAYER));
-		RenderProjectils(Data.GetID(IMG_MISSILE));
+			RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
+			Player.Draw(Data.GetID(IMG_PLAYER));
+			RenderProjectils(Data.GetID(IMG_MISSILE));
 		
 
-		RenderGUI();
-
+			RenderGUI();
+		}
+		if(gameOver) RenderGameOver();
 		glutSwapBuffers();
 	}
 }
@@ -644,9 +750,11 @@ bool cGame::ProcessMenu()
 				switch(Menu.getSO()){
 					case 0:	// Level 1
 						this->level = 1;
+						mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 						Init();
 						break;
 					case 1:	// Level 2
+						mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 						this->level = 2;
 						Init();
 						break;
@@ -964,6 +1072,7 @@ void cGame::RenderMenu()
 					printCredits();
 					break;
 				case MENU_SELECT_LEVEL:
+					Player.setLives(3);
 					selectLevel();
 					break;
 			}
@@ -1012,9 +1121,9 @@ bool cGame::generateEnemies(int level)
 	int x, y, type;
 	char c;
 
-	if(this->level == 1)
+	if(level == 1)
 		fd=fopen("txt/enemiesLVL1.txt","r");
-	else if(this->level == 2)
+	else if(level == 2)
 		fd=fopen("txt/enemiesLVL2.txt","r");
 	//if(fd==NULL) return false;
 
@@ -1028,13 +1137,15 @@ bool cGame::generateEnemies(int level)
 
 		if(type == 4) {
 			Boss.setPosXY(x, y);
-			if(this->level == 1) {
+			if(level == 1) {
 				Boss.setLife(LIFE_BOSS_1);
-				//Boss.setWidthHeight(33*1.2,25*1.2);
+				Boss.setType1(1);
+				Boss.setWidthHeight(162*1.3, 206*1.3);
 			}
-			else if(this->level == 2) {
+			else if(level == 2) {
 				Boss.setLife(LIFE_BOSS_2);
-				//Boss.setWidthHeight(33*1.2,25*1.2);
+				Boss.setType1(2);
+				Boss.setWidthHeight(67*2, 48*2);
 			}
 		}
 		else {
