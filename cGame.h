@@ -59,6 +59,11 @@ public:
 
 	void ActivateProjectil(int x, int y, int type);
 
+	void LogicBeforeBoss();
+
+	void LogicWithBoss();
+
+
 	void RenderProjectils(int textId);
 
 	void RenderMenu();

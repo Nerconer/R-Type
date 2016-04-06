@@ -131,6 +131,9 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_ENEMY3,"img/enemies/enemy3.png",GL_RGBA);
 	if(!res) return false;
 
+	res = Data.LoadImage(IMG_MISSILES_ENEMIC, "img/enemies/projectils.png", GL_RGBA);
+	if (!res) return false;
+
 	if(level == 0) {
 		mciSendString("play sound/Intro.wav",NULL,0,NULL);
 		/*res = PlaySound(TEXT("sound/Intro.wav"),NULL,SND_LOOP |SND_ASYNC);
@@ -320,12 +323,10 @@ bool cGame::Process()
 		Player.setLives(Player.getLives() - 1);
 
 		lastArrowTime = glutGet(GLUT_ELAPSED_TIME);
+		//Evita que el Player.Advance es mengi dos vidas
 		if (!isRight && !Player.getIsKilledByRight()) Player.setIsKilledByRight(false);
 	}
 
-
-
-	
 	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
 		int x,y;
 		Player.GetPosition(&x,&y);
@@ -364,13 +365,29 @@ bool cGame::Process()
 		}
 	}
 	
+	
+	if (Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
+
+		LogicBeforeBoss();
+	}
+
+	else LogicWithBoss();
+
+
+	return res;
+}
+
+void cGame::LogicBeforeBoss()
+{
+
+
 	// MISSILES
 	for (int i = 0; i < NUM_MISSILES; ++i) {
 		if (projectils[i].getActive()) {
 			if (projectils[i].canMove()) {
 				int x, y;
 				projectils[i].getPosition(&x, &y);
-				if(!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
+				if (!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
 				else {
 					if (!projectils[i].isCollision(&Scene.map)) {
 						x = x + SPEED_PROJ;
@@ -401,74 +418,149 @@ bool cGame::Process()
 
 	// ENEMIES
 	for (int i = 0; i < NUM_ENEMIES; ++i) {
-		if(!enemies[i].isDead()) {
-			if(1) {	// can move?
-				//if (!enemies[i].isCollision(&Scene.map)) {
-					int x, y;
-					enemies[i].getPosXY(&x, &y);
-					if (!this->isVisible(x)) {}
-					else if (!isVisibleLeft(x)) {
+		if (!enemies[i].isDead()) {
+			if (1) {	// can move?
+						//if (!enemies[i].isCollision(&Scene.map)) {
+				int x, y;
+				enemies[i].getPosXY(&x, &y);
+				if (!this->isVisible(x)) {}
+				else if (!isVisibleLeft(x)) {
+					enemies[i].setDead(true);
+				}
+				else {
+					//Comprova si el jugador a xocat
+					cRect cRect;
+					Player.GetArea(&cRect);
+					if (enemies[i].Collides(&cRect)) {
+
+						//Posar que la vida es resti
+						Player.setLives(Player.getLives() - 1);
 						enemies[i].setDead(true);
 					}
-					else {
-						//Comprova si el jugador a xocat
-						cRect cRect;
-						Player.GetArea(&cRect);
-						if (enemies[i].Collides(&cRect)) {
 
-							//Posar que la vida es resti
-							Player.setLives(Player.getLives() - 1);
-							enemies[i].setDead(true);
-						}
+					if (enemies[i].getType() == 1) {
+						x -= SPEED_ENEMY1;
+						enemies[i].setPosXY(x, y);
+					}
+					else if (enemies[i].getType() == 2) {
+						x -= SPEED_ENEMY2;
+						enemies[i].setPosXY(x, y);
 
-						if(enemies[i].getType() == 1) {
-							x -= SPEED_ENEMY1;
-							enemies[i].setPosXY(x, y);
-						}
-						else if(enemies[i].getType() == 2) {
-							x -= SPEED_ENEMY2;
-							enemies[i].setPosXY(x, y);
-						}
-						else if(enemies[i].getType() == 3) {
-							int xPlayer, yPlayer;
-							Player.GetPosition(&xPlayer, &yPlayer);
-							//Seguira al player
-							//L'enemic 3 segueix al Player y acelera quan esta a la seva altura
-							int w, h;
-							enemies[i].getWidthHeight(&w, &h);
-							if (yPlayer == (y - h)) x -= SPEED_ENEMY3;
-							else if (yPlayer > (y - h)) {
-								y += SPEED_ENEMY3 - 1;
-								x -= 1;
+						
+						for (int j = 0; j < 4; ++j) {
+							if (!enemies[i].projectils[j].getActive()) {
+								enemies[i].projectils[j].setActive(true);
+								enemies[i].projectils[j].setPosition(x, y);
+								enemies[i].projectils[j].setDimensions(20, 20);
+
 							}
 							else {
-								x -= 1;
-								y -= (SPEED_ENEMY3 - 1);
-							}
+								int xPlayer, yPlayer, xM, yM;
+								Player.GetPosition(&xPlayer, &yPlayer);
+								//Seguira al player
+								//L'enemic 3 segueix al Player y acelera quan esta a la seva altura
+								enemies[i].projectils[j].getPosition(&xM, &yM);
+								if (yPlayer == yM) xM -= 1;
+								else if (yPlayer > yM) {
+									yM += 1;
+									xM -= 1;
+								}
+								else {
+									xM -= 1;
+									yM -= 1;
+								}
+								enemies[i].projectils[j].setPosition(xM, yM);
 
-							enemies[i].setPosXY(x, y);
+							}
 						}
-						
+
 					}
+					else if (enemies[i].getType() == 3) {
+						int xPlayer, yPlayer;
+						Player.GetPosition(&xPlayer, &yPlayer);
+						//Seguira al player
+						//L'enemic 3 segueix al Player y acelera quan esta a la seva altura
+						int w, h;
+						enemies[i].getWidthHeight(&w, &h);
+						if (yPlayer == (y - h)) x -= SPEED_ENEMY3;
+						else if (yPlayer > (y - h)) {
+							y += SPEED_ENEMY3 - 1;
+							x -= 1;
+						}
+						else {
+							x -= 1;
+							y -= (SPEED_ENEMY3 - 1);
+						}
+
+						enemies[i].setPosXY(x, y);
+					}
+
+				}
 			}
 		}
 	}
-	if(level == 2) {
+
+
+}
+
+void cGame::LogicWithBoss()
+{
+
+	//Si el jugador Choca amb el boss
+	cRect cRect;
+	Player.GetArea(&cRect);
+	if (Boss.Collides(&cRect)) {
+
+		//Posar que la vida es resti
+		Player.setLives(Player.getLives() - 1);
+		
+	}
+
+	//Logica dels missils
+
+	// MISSILES
+	for (int i = 0; i < NUM_MISSILES; ++i) {
+		if (projectils[i].getActive()) {
+			if (projectils[i].canMove()) {
+				int x, y;
+				projectils[i].getPosition(&x, &y);
+				if (!this->isVisible(x)) projectils[i].setActive(false);	// missile not visible
+				else {
+					if (!projectils[i].isCollision(&Scene.map)) {
+						x = x + SPEED_PROJ;
+						projectils[i].setPosition(x, y);
+						projectils[i].GetArea(&cRect);
+						if (Boss.Collides(&cRect)) {
+							projectils[i].setActive(false);
+							Boss.setLife(Boss.getLife() - projectils[i].getDamage());
+						}
+					}
+					else projectils[i].setActive(false);
+				}
+			}
+		}
+	}
+
+	//Logica del enemic
+
+	if (level == 2) {
 		int x = Boss.getNumIterUp();
 		bool up = Boss.getUp();
-		if(up && x >= ITERATIONS_UPDOWN) {
+		if (up && x >= ITERATIONS_UPDOWN) {
 			Boss.setUp(false);
-			Boss.setNumIterUp(x-2);
+			Boss.setNumIterUp(x - 2);
 		}
-		else if(!up && x <= 0) {
+		else if (!up && x <= 0) {
 			Boss.setUp(true);
-			Boss.setNumIterUp(x+2);
+			Boss.setNumIterUp(x + 2);
 		}
-		else if(up) Boss.setNumIterUp(x+2);
-		else if(!up) Boss.setNumIterUp(x-2);
+		else if (up) Boss.setNumIterUp(x + 2);
+		else if (!up) Boss.setNumIterUp(x - 2);
 	}
-	return res;
+
 }
+
+
 
 void printString(void* font, const char* string)
 {
@@ -570,6 +662,10 @@ void cGame::RenderEnemies(int id1, int id2, int id3)
 				}
 				else if(enemies[i].getType() == 2) {
 					enemies[i].Draw(id2);
+
+					for (int j = 0; j < 4; ++j) {
+						enemies[i].projectils[j].DrawRect(Data.GetID(IMG_MISSILES_ENEMIC));
+					}
 				}
 				else if(enemies[i].getType() == 3) {
 					enemies[i].Draw(id3);
@@ -667,6 +763,8 @@ void cGame::ActivateProjectil(int x, int y, int type)
 		}
 	}
 }
+
+
 
 void cGame::RenderProjectils(int textId)
 {

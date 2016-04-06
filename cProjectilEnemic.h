@@ -15,8 +15,8 @@
 
 
 //La imatge es img/nau_alpha.png
-#define IMG_WIDTH 33
-#define IMG_HEIGHT 31
+#define IMG_WIDTH 128
+#define IMG_HEIGHT 128
 
 
 class cProjectilEnemic

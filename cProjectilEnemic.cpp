@@ -111,11 +111,11 @@ void cProjectilEnemic::DrawRect(int tex_id)
 
 	int screen_x, screen_y;
 
-	float xo = float(134) / IMG_WIDTH;
-	float xf = float(144) / IMG_WIDTH;
+	float xo = float(1) / IMG_WIDTH;
+	float xf = float(32) / IMG_WIDTH;
 
-	float yo = float(4) / IMG_HEIGHT;
-	float yf = float(13) / IMG_HEIGHT;
+	float yo = float(1) / IMG_HEIGHT;
+	float yf = float(32) / IMG_HEIGHT;
 
 
 	screen_x = posx;
