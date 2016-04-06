@@ -447,11 +447,11 @@ void cGame::LogicBeforeBoss()
 						enemies[i].setPosXY(x, y);
 
 						// Projectils enemics 2
-						for (int j = 0; j < 5; ++j) {
+						for (int j = 0; j < 3; ++j) {
 
 							if (!enemies[i].projectils[j].getActive()) {
 								enemies[i].projectils[j].setActive(true);
-								enemies[i].projectils[j].setPosition(x, y);
+								enemies[i].projectils[j].setPosition(x - j, y + j);
 								enemies[i].projectils[j].setDimensions(20, 20);
 
 							}
@@ -468,15 +468,17 @@ void cGame::LogicBeforeBoss()
 									int xPlayer, yPlayer, xM, yM;
 									Player.GetPosition(&xPlayer, &yPlayer);
 									enemies[i].projectils[j].getPosition(&xM, &yM);
+									
 									if (j > 0) {
-										yM += (1 + (rand() % (int)(j - 1 + 1)));
-										xM -= (1 + (rand() % (int)(j - 1 + 1)));
+										yM += (1 + (rand() % (int)(j*2 - 1 + 1)));
+										xM -= (1 + (rand() % (int)(j*2 - 1 + 1)));
 									}
 									else {
 										yM += 1;
 										xM -= 1;
 									}
 									enemies[i].projectils[j].setPosition(xM, yM);
+
 								}
 
 							}
@@ -671,7 +673,7 @@ void cGame::RenderEnemies(int id1, int id2, int id3)
 				else if(enemies[i].getType() == 2) {
 					enemies[i].Draw(id2);
 
-					for (int j = 0; j < 5; ++j) {
+					for (int j = 0; j < 3; ++j) {
 						enemies[i].projectils[j].DrawRect(Data.GetID(IMG_MISSILES_ENEMIC));
 					}
 				}
