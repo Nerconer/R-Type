@@ -278,8 +278,8 @@ bool cGame::Process()
 	}
 	if(Boss.getLife() <= 0) {
 		// WIN
-		res = PlaySound(TEXT("sound/win.wav"),NULL,SND_LOOP |SND_ASYNC);
-		if (res == false) return res;
+		//res = PlaySound(TEXT("sound/win.wav"),NULL,SND_LOOP |SND_ASYNC);
+		//if (res == false) return res;
 		if(!this->bossDead) {
 			this->bossDead = true;
 			PlaySound(NULL,NULL,0);
@@ -358,7 +358,7 @@ bool cGame::Process()
 				ActivateProjectil(x,y,1);
 				Player.Shoot(1);
 			}
-			else {	// atac fort
+			else if(diff >= TIME_STRONG_SHOT) {	// atac fort
 				ActivateProjectil(x,y,2);
 				Player.Shoot(2);
 			}
@@ -452,7 +452,7 @@ void cGame::LogicBeforeBoss()
 							if (!enemies[i].projectils[j].getActive()) {
 								enemies[i].projectils[j].setActive(true);
 								enemies[i].projectils[j].setPosition(x - j, y + j);
-								enemies[i].projectils[j].setDimensions(20, 20);
+								enemies[i].projectils[j].setDimensions(20*0.5, 20*0.5);
 
 							}
 							else {
@@ -1267,7 +1267,7 @@ bool cGame::generateEnemies(int level)
 			if(level == 1) {
 				Boss.setLife(LIFE_BOSS_1);
 				Boss.setType1(1);
-				Boss.setWidthHeight(162*1.3, 206*1.3);
+				Boss.setWidthHeight(162*1.7, 206*1.7);
 			}
 			else if(level == 2) {
 				Boss.setLife(LIFE_BOSS_2);

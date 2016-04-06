@@ -14,7 +14,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 50
-#define NUM_ENEMIES 1
+#define NUM_ENEMIES 56
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -25,7 +25,7 @@
 
 #define DELAY_PROJ 200
 #define SPEED_PROJ 32
-#define TIME_MEDIUM_SHOT 200
+#define TIME_MEDIUM_SHOT 300
 #define TIME_STRONG_SHOT 2000
 #define TIME_A_BUTTON 3000
 
