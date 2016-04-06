@@ -554,35 +554,18 @@ void cGame::LogicWithBoss()
 	//Logica del enemic
 
 	if (level == 2) {
-		int x, y;
-		Boss.getPosXY(&x, &y);
-		int iters = Boss.getNumIterUp();
+		int x = Boss.getNumIterUp();
 		bool up = Boss.getUp();
-		if (up && iters >= ITERATIONS_UPDOWN) {
+		if (up && x >= ITERATIONS_UPDOWN) {
 			Boss.setUp(false);
-			Boss.setNumIterUp(iters - 2);
-			y -= 2;
-
+			Boss.setNumIterUp(x - 2);
 		}
-		else if (!up && iters <= 0) {
+		else if (!up && x <= 0) {
 			Boss.setUp(true);
-			Boss.setNumIterUp(iters + 2);
-			y += 2;
+			Boss.setNumIterUp(x + 2);
 		}
-		else if (up) {
-			Boss.setNumIterUp(iters + 2);
-			y += 2;
-		}
-		else if (!up) {
-			Boss.setNumIterUp(iters - 2);
-			y -= 2;
-		}
-
-
-		Boss.setPosXY(x, y);
-
-
-
+		else if (up) Boss.setNumIterUp(x + 2);
+		else if (!up) Boss.setNumIterUp(x - 2);
 	}
 
 }
