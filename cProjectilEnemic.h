@@ -18,6 +18,9 @@
 #define IMG_WIDTH 128
 #define IMG_HEIGHT 128
 
+#define IMG_WIDTH_BOSS2 495
+#define IMG_HEIGHT_BOSS2 131
+
 
 class cProjectilEnemic
 {
@@ -42,6 +45,8 @@ public:
 
 	void DrawRect(int tex_id);
 
+	void DrawRectBoss2(int tex_id);
+
 	void setDimensions(int w, int h);
 
 	void GetArea(cRect * rc);
@@ -61,4 +66,7 @@ private:
 	int w, h; //dimensions
 	int delay;
 	int damage;
+
+	int state;
+	int seqCount;
 };

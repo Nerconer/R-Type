@@ -5,6 +5,8 @@ cProjectilEnemic::cProjectilEnemic(void)
 {
 	active = false;
 	delay = 0;
+	state = 0;
+	seqCount = 0;
 }
 
 void cProjectilEnemic::setDimensions(int w, int h) {
@@ -40,6 +42,8 @@ bool cProjectilEnemic::Collapsed(int x, int y) {
 	return false;
 
 }
+
+
 
 
 cProjectilEnemic::~cProjectilEnemic(void)
@@ -88,6 +92,8 @@ void cProjectilEnemic::setType(int type)
 	//if (type == 0) this->damage = LIFE_ENEMY_1;
 	//else if (type == 1) this->damage = LIFE_ENEMY_1 * 3;
 //	else if (type == 2) this->damage = LIFE_ENEMY_1 * 15;
+
+	this->type = type;
 }
 
 void cProjectilEnemic::getPosition(int *posx, int *posy)
@@ -116,6 +122,49 @@ void cProjectilEnemic::DrawRect(int tex_id)
 
 	float yo = float(1) / IMG_HEIGHT;
 	float yf = float(32) / IMG_HEIGHT;
+
+
+	screen_x = posx;
+	screen_y = posy + (BLOCK_SIZE - TILE_SIZE);
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+	glBegin(GL_QUADS);
+	glTexCoord2f(xo, yf);	glVertex2i(screen_x, screen_y);
+	glTexCoord2f(xo, yo);	glVertex2i(screen_x, screen_y + h);
+	glTexCoord2f(xf, yo);	glVertex2i(screen_x + w, screen_y + h);
+	glTexCoord2f(xf, yf);	glVertex2i(screen_x + w, screen_y);
+
+
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void cProjectilEnemic::DrawRectBoss2(int tex_id)
+{
+	//x + WIDTH PLAYER
+	int posx = this->x;
+	int posy = this->y;
+
+
+	int screen_x, screen_y;
+
+	float xo = (float(0) + state*162) / IMG_WIDTH_BOSS2;
+	float xf = (float(162) + state*162)/ IMG_WIDTH_BOSS2;
+
+	float yo = float(14) / IMG_HEIGHT_BOSS2;
+	float yf = float(68) / IMG_HEIGHT_BOSS2;
+
+	if (seqCount == 10) {
+		state += 1;
+		seqCount = 0;
+	}
+
+	++seqCount;
+
+	if (state == 4) state = 0;
 
 
 	screen_x = posx;

@@ -26,6 +26,10 @@ public:
 	int getLives();
 	void setLives(int lives);
 
+	bool getHurted();
+
+	void setHurted(bool hurted);
+
 	bool isAdvancing;
 
 	bool getIsKilledByRight();
@@ -35,6 +39,7 @@ private:
 	int lives;
 	float steps;
 	bool isKilledByRight;
+	bool hurted;
 	
 
 };

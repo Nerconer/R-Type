@@ -40,7 +40,5 @@ private:
 	bool up; // boss 2
 	float numIterUp;
 
-	cProjectilEnemic projectils[10];
-
 };
 
