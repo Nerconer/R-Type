@@ -446,8 +446,9 @@ void cGame::LogicBeforeBoss()
 						x -= SPEED_ENEMY2;
 						enemies[i].setPosXY(x, y);
 
-						
-						for (int j = 0; j < 4; ++j) {
+						// Projectils enemics 2
+						for (int j = 0; j < 5; ++j) {
+
 							if (!enemies[i].projectils[j].getActive()) {
 								enemies[i].projectils[j].setActive(true);
 								enemies[i].projectils[j].setPosition(x, y);
@@ -455,21 +456,28 @@ void cGame::LogicBeforeBoss()
 
 							}
 							else {
-								int xPlayer, yPlayer, xM, yM;
-								Player.GetPosition(&xPlayer, &yPlayer);
-								//Seguira al player
-								//L'enemic 3 segueix al Player y acelera quan esta a la seva altura
-								enemies[i].projectils[j].getPosition(&xM, &yM);
-								if (yPlayer == yM) xM -= 1;
-								else if (yPlayer > yM) {
-									yM += 1;
-									xM -= 1;
+								enemies[i].projectils[j].GetArea(&cRect);
+								if (Player.Collides(&cRect)) {
+									enemies[i].projectils[j].setActive(false);
+									Player.setLives(Player.getLives() - 1);
+								}
+								else if (enemies[i].projectils[j].isCollision(&Scene.map)) {
+									enemies[i].projectils[j].setActive(false);
 								}
 								else {
-									xM -= 1;
-									yM -= 1;
+									int xPlayer, yPlayer, xM, yM;
+									Player.GetPosition(&xPlayer, &yPlayer);
+									enemies[i].projectils[j].getPosition(&xM, &yM);
+									if (j > 0) {
+										yM += (1 + (rand() % (int)(j - 1 + 1)));
+										xM -= (1 + (rand() % (int)(j - 1 + 1)));
+									}
+									else {
+										yM += 1;
+										xM -= 1;
+									}
+									enemies[i].projectils[j].setPosition(xM, yM);
 								}
-								enemies[i].projectils[j].setPosition(xM, yM);
 
 							}
 						}
@@ -663,7 +671,7 @@ void cGame::RenderEnemies(int id1, int id2, int id3)
 				else if(enemies[i].getType() == 2) {
 					enemies[i].Draw(id2);
 
-					for (int j = 0; j < 4; ++j) {
+					for (int j = 0; j < 5; ++j) {
 						enemies[i].projectils[j].DrawRect(Data.GetID(IMG_MISSILES_ENEMIC));
 					}
 				}

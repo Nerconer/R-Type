@@ -62,9 +62,6 @@ public:
 
 	vector<cProjectilEnemic> projectils;
 
-	int getActiveMissiles();
-	void setActiveMissiles(int count);
-
 
 protected:
 	int life;
@@ -77,7 +74,6 @@ protected:
 	int lastShot;
 	bool hurted;
 
-	int activeMissiles;
 
 
 	vector<posTexture> seqEnemy;

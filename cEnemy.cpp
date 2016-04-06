@@ -118,16 +118,6 @@ bool cEnemy::Collides(cRect *rc)
 	return (rc->left < rigth) && (left < rc->right) && (rc->bottom < top) && (bottom < rc->top);
 }
 
-int cEnemy::getActiveMissiles()
-{
-	return activeMissiles;
-}
-
-void cEnemy::setActiveMissiles(int count)
-{
-	activeMissiles = count;
-}
-
 
 void cEnemy::setType(int type)
 {
