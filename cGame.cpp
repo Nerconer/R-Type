@@ -68,7 +68,7 @@ bool cGame::Init()
 		if (!res) return false;
 
 		//Player initialization
-		res = Data.LoadImage(IMG_PLAYER,"img/nau-alpha.png",GL_RGBA);
+		res = Data.LoadImage(IMG_PLAYER,"img/naus.png",GL_RGBA);
 		if(!res) return false;
 
 		res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);

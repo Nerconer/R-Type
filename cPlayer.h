@@ -6,8 +6,8 @@
 #define PLAYER_START_CY		2
 
 //nau-alpha.png
-#define IMG_WIDTH_PLAYER 532
-#define IMG_HEIGHT_PLAYER 372
+#define IMG_WIDTH_PLAYER 166
+#define IMG_HEIGHT_PLAYER 86
 
 // nau-alpha2.png
 #define IMG_WIDTH_PLAYER1 269
@@ -38,10 +38,15 @@ public:
 	bool getBackWindow();
 	void setBackWindow(bool b);
 
+	void setNauSelected(int nauSeleted);
+	int getNauSelected();
+
 private:
 	int lives;
 	float steps;
 	bool isKilledByRight;
 	int hurted;
 	bool backWindow;
+
+	int nauSelected;
 };
