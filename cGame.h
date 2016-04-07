@@ -7,6 +7,7 @@
 #include "cMenu.h"
 #include "cEnemy.h"
 #include "cBoss.h"
+#include "cExplosion.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -15,6 +16,7 @@
 
 #define NUM_MISSILES 20
 #define NUM_ENEMIES 56
+#define NUM_EXPLOSIONS 10
 
 #define KEY_SPACE 32
 #define KEY_A_MAJ 65
@@ -88,6 +90,10 @@ public:
 
 	void RenderGameOver();
 
+	void RenderExplosions(int id);
+
+	void setExplosion(int j);	// position enemies vector
+
 	cPlayer getPlayer();
 
 private:
@@ -123,12 +129,13 @@ private:
 
 	cEnemy enemies[NUM_ENEMIES];
 
+	cExplosion explosions[NUM_EXPLOSIONS];
+
 	cBoss Boss;
 
 	bool bossDead;
 
 	bool pause;
-	
 
 	bool gameOver;
 };

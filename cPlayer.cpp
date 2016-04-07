@@ -3,7 +3,7 @@
 
 cPlayer::cPlayer() {
 
-
+	this->backWindow = false;
 	posTexture p;
 	textSeq = vector<posTexture>(5);
 
@@ -84,6 +84,16 @@ cPlayer::cPlayer() {
 	this->lives = 3;
 }
 cPlayer::~cPlayer(){}
+
+void cPlayer::setBackWindow(bool b)
+{
+	this->backWindow = b;
+}
+
+bool cPlayer::getBackWindow() 
+{
+	return this->backWindow;
+}
 
 posTexture p;
 int cont = 0;

@@ -134,6 +134,9 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_MISSILES_ENEMIC, "img/enemies/projectils.png", GL_RGBA);
 	if (!res) return false;
 
+	res = Data.LoadImage(IMG_EXPLOSIONS1, "img/explosion1.png", GL_RGBA);
+	if (!res) return false;
+
 	if(level == 0) {
 		mciSendString("play sound/Intro.wav",NULL,0,NULL);
 		/*res = PlaySound(TEXT("sound/Intro.wav"),NULL,SND_LOOP |SND_ASYNC);
@@ -165,6 +168,10 @@ bool cGame::Init()
 	for(int i = 0; i < NUM_MISSILES; i++)
 		projectils[i].setDimensions(20*0.5,10*0.5);
 		*/
+	for(int i = 0; i < NUM_EXPLOSIONS; i++) {
+		explosions[i].setActive(false);
+	}
+
 	return res;
 }
 
@@ -265,7 +272,10 @@ bool cGame::Process()
 	int x, y;
 
 	Player.GetPosition(&x, &y);
-
+	
+	if(x <= Scene.velocitat) {
+		Player.setBackWindow(true);
+	}
 	if (!isVisibleLeft(x)) Player.setLives(0);
 
 	if(Player.getLives() < 0) {
@@ -304,6 +314,7 @@ bool cGame::Process()
 
 	//Avancem jugador
 	Player.Advance();
+
 
 	
 	bool isAdvanced = false;
@@ -383,6 +394,36 @@ bool cGame::Process()
 	return res;
 }
 
+void cGame::setExplosion(int j)
+{
+	int x, y;
+	enemies[j].getPosXY(&x, &y);
+
+	for(int k = 0; k <= NUM_EXPLOSIONS; k++) {
+		if(!explosions[k].getActive()) {
+			explosions[k].setActive(true);
+			float offsetX, offsetY;
+			int w, h;
+			enemies[j].getWidthHeight(&w, &h);
+			offsetX = (w/2);
+			offsetY = (h/2);
+			if(enemies[j].getType() == 1) {
+				cExplosion explosion(true, 0, x - offsetX - 5, y - 10, 1, 0);	// act, currAnim, x, y, type, delayAnim
+				explosions[k] = explosion;
+			}
+			else if(enemies[j].getType() == 3) {
+				cExplosion explosion(true, 0, x - 15, y- 60, 1, 0);	// act, currAnim, x, y, type, delayAnim
+				explosions[k] = explosion;
+			}
+			else if(enemies[j].getType() == 2){
+				cExplosion explosion(true, 0, x, y - offsetY - 30, 1, 0);	// act, currAnim, x, y, type, delayAnim
+				explosions[k] = explosion;
+			}
+												
+		}
+	}
+}
+
 void cGame::LogicBeforeBoss()
 {
 
@@ -408,6 +449,7 @@ void cGame::LogicBeforeBoss()
 									int life = enemies[j].getLife() - projectils[i].getDamage();
 									if (life <= 0) {
 										enemies[j].setDead(true);
+										this->setExplosion(j);
 									}
 									else enemies[j].setLife(life);
 									projectils[i].setActive(false);
@@ -442,6 +484,7 @@ void cGame::LogicBeforeBoss()
 						//Posar que la vida es resti
 						Player.setLives(Player.getLives() - 1);
 						enemies[i].setDead(true);
+						this->setExplosion(i);
 					}
 
 					if (enemies[i].getType() == 1) {
@@ -560,17 +603,25 @@ void cGame::LogicWithBoss()
 	//Logica del enemic
 
 	if (level == 2) {
-		int x = Boss.getNumIterUp();
+		int x, y;
+		Boss.getPosXY(&x, &y);
+		int iters = Boss.getNumIterUp();
 		bool up = Boss.getUp();
-		if (up && x >= ITERATIONS_UPDOWN) {
+		if (up && iters >= ITERATIONS_UPDOWN) {
 			Boss.setUp(false);
-			Boss.setNumIterUp(x - 2);
+			Boss.setNumIterUp(iters - 2);
+			y -= 2;
+
 		}
-		else if (!up && x <= 0) {
+		else if (!up && iters <= 0) {
 			Boss.setUp(true);
-			Boss.setNumIterUp(x + 2);
+			Boss.setNumIterUp(iters + 2);
+			y += 2;
 		}
-		else if (!up) Boss.setNumIterUp(x - 2);
+		else if (up) {
+			Boss.setNumIterUp(iters + 2);
+			y += 2;
+		}
 		else if (!up) {
 			Boss.setNumIterUp(iters - 2);
 			y -= 2;
@@ -680,7 +731,6 @@ void cGame::LogicWithBoss()
 
 		}
 
->>>>>>> 7ea3197ff149af4566c431ec57d4df78519fff07
 	}
 
 }
@@ -846,6 +896,15 @@ void cGame::RenderGameOver()
 	glPopMatrix();
 }
 
+void cGame::RenderExplosions(int id)
+{
+	for(int i = 0; i < NUM_EXPLOSIONS; ++i) {
+		if(explosions[i].getActive()) {
+			explosions[i].Draw(id);
+		}
+	}
+}
+
 //Output
 void cGame::Render()
 {
@@ -875,7 +934,8 @@ void cGame::Render()
 				Player.Draw(Data.GetID(IMG_PLAYER));
 			//else Player.setHurted(false);
 			RenderProjectils(Data.GetID(IMG_MISSILE));
-		
+			
+			RenderExplosions(Data.GetID(IMG_EXPLOSIONS1));
 
 			RenderGUI();
 		}
@@ -1421,7 +1481,7 @@ bool cGame::generateEnemies(int level)
 			else if(type == 3) {
 				enemy.setType(3);
 				enemy.setWidthHeight(34*2.0,26*2.0);
-				enemy.setLife(LIFE_ENEMY_1);
+				enemy.setLife(LIFE_ENEMY_1 * 2);
 			}
 			enemies[i] = enemy;
 		}

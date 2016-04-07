@@ -35,11 +35,13 @@ public:
 	bool getIsKilledByRight();
 	void setIsKilledByRight(bool killed);
 
+	bool getBackWindow();
+	void setBackWindow(bool b);
+
 private:
 	int lives;
 	float steps;
 	bool isKilledByRight;
 	bool hurted;
-	
-
+	bool backWindow;
 };
