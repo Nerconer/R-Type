@@ -288,7 +288,7 @@ bool cGame::Process()
 		gameOver = true;
 		++contGameOver;
 		if(level == 1) mciSendString("stop sound/Stage1.wav",NULL,0,NULL);
-		else if(level == 2) mciSendString("stop sound/Stage1.wav",NULL,0,NULL);
+		else if(level == 2) mciSendString("stop sound/background-lvl1.wav",NULL,0,NULL);
 		if(contGameOver == 1) mciSendString("play sound/gameOver.wav",NULL,0,NULL);
 		else if(contGameOver == 200) mciSendString("stop sound/gameOver.wav",NULL,0,NULL);
 		if(keys[KEY_INTRO]) {
