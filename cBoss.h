@@ -28,6 +28,8 @@ public:
 
 	void setType1(int type);
 
+	bool Collides(cRect * rc);
+
 	void setUp(bool up);
 	bool getUp();
 

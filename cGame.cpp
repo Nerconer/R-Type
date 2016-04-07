@@ -495,13 +495,18 @@ void cGame::LogicBeforeBoss()
 					else if (enemies[i].getType() == 2) {
 						x -= SPEED_ENEMY2;
 						enemies[i].setPosXY(x, y);
+						int xPlayer, yPlayer, xM, yM;
+						Player.GetPosition(&xPlayer, &yPlayer);
 
 						// Projectils enemics 2
 						for (int j = 0; j < 3; ++j) {
 
 							if (!enemies[i].projectils[j].getActive()) {
 								enemies[i].projectils[j].setActive(true);
-								enemies[i].projectils[j].setPosition(x - j, y + j);
+								if (yPlayer <= y) {
+									enemies[i].projectils[j].setPosition(x + j + 20, y  - j + - 10);
+								}
+								else enemies[i].projectils[j].setPosition(x - j, y + j);
 								enemies[i].projectils[j].setDimensions(20*0.5, 20*0.5);
 
 							}
@@ -515,24 +520,14 @@ void cGame::LogicBeforeBoss()
 									enemies[i].projectils[j].setActive(false);
 								}
 								else {
-									int xPlayer, yPlayer, xM, yM;
-									Player.GetPosition(&xPlayer, &yPlayer);
+									
 									enemies[i].projectils[j].getPosition(&xM, &yM);
 
-									if (yPlayer == yM) {
+									if (yPlayer <= y && yM <= y) {
 
-										if (yPlayer == yM) xM -= 1;
-										else if (yPlayer > yM) {
-											yM += 1;
-											xM -= 1;
-										}
-										else {
-											xM -= 1;
-											yM -= 1;
-										}
+										xM -= j + 1;
 
-
-
+		
 									}
 									else {
 
@@ -544,8 +539,10 @@ void cGame::LogicBeforeBoss()
 											yM += 1;
 											xM -= 1;
 										}
-										enemies[i].projectils[j].setPosition(xM, yM);
+										
 									}
+
+									enemies[i].projectils[j].setPosition(xM , yM);
 								}
 
 							}

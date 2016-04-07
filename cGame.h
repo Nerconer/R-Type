@@ -15,7 +15,7 @@
 #define PANEL_SIZE 50
 
 #define NUM_MISSILES 20
-#define NUM_ENEMIES 1
+#define NUM_ENEMIES 56
 #define NUM_EXPLOSIONS 10
 
 #define KEY_SPACE 32
@@ -25,7 +25,7 @@
 
 #define DELAY_LIVE 2000
 
-#define DELAY_PROJ 200
+#define DELAY_PROJ 400
 #define SPEED_PROJ 32
 #define TIME_MEDIUM_SHOT 300
 #define TIME_STRONG_SHOT 2000
@@ -33,7 +33,7 @@
 
 #define SPEED_ENEMY1 3
 #define SPEED_ENEMY2 1
-#define SPEED_ENEMY3 5
+#define SPEED_ENEMY3 3
 
 
 class cGame
