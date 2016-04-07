@@ -384,12 +384,12 @@ bool cGame::Process()
 	}
 	
 	
-	if (level != 1 && Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
+	if (Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
 
 		LogicBeforeBoss();
 	}
 
-	if (level == 1) LogicWithBoss();
+	else LogicWithBoss();
 
 
 	return res;
@@ -518,17 +518,34 @@ void cGame::LogicBeforeBoss()
 									int xPlayer, yPlayer, xM, yM;
 									Player.GetPosition(&xPlayer, &yPlayer);
 									enemies[i].projectils[j].getPosition(&xM, &yM);
-									
-									if (j > 0) {
-										yM += (1 + (rand() % (int)(j*2 - 1 + 1)));
-										xM -= (1 + (rand() % (int)(j*2 - 1 + 1)));
+
+									if (yPlayer == yM) {
+
+										if (yPlayer == yM) xM -= 1;
+										else if (yPlayer > yM) {
+											yM += 1;
+											xM -= 1;
+										}
+										else {
+											xM -= 1;
+											yM -= 1;
+										}
+
+
+
 									}
 									else {
-										yM += 1;
-										xM -= 1;
-									}
-									enemies[i].projectils[j].setPosition(xM, yM);
 
+										if (j > 0) {
+											yM += (1 + (rand() % (int)(j * 2 - 1 + 1)));
+											xM -= (1 + (rand() % (int)(j * 2 - 1 + 1)));
+										}
+										else {
+											yM += 1;
+											xM -= 1;
+										}
+										enemies[i].projectils[j].setPosition(xM, yM);
+									}
 								}
 
 							}
