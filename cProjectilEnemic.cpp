@@ -88,10 +88,6 @@ int cProjectilEnemic::getType()
 
 void cProjectilEnemic::setType(int type)
 {
-	//this->type = type;
-	//if (type == 0) this->damage = LIFE_ENEMY_1;
-	//else if (type == 1) this->damage = LIFE_ENEMY_1 * 3;
-//	else if (type == 2) this->damage = LIFE_ENEMY_1 * 15;
 
 	this->type = type;
 }
@@ -142,6 +138,113 @@ void cProjectilEnemic::DrawRect(int tex_id)
 	glDisable(GL_TEXTURE_2D);
 }
 
+
+void cProjectilEnemic::DrawRectBoss1(int tex_id)
+{
+	//x + WIDTH PLAYER
+	int posx = this->x;
+	int posy = this->y;
+
+	float xo, xf, yo, yf;
+
+	float screen_x, screen_y;
+
+
+	switch (type) {
+	case 1:
+		xo = (float(0) + state * 36) / IMG_WIDTH_BOSS1;
+		xf = (float(36) + state * 36) / IMG_WIDTH_BOSS1;
+
+		yo = float(0) / IMG_HEIGHT_BOSS1;
+		yf = float(22) / IMG_HEIGHT_BOSS1;
+
+		if (seqCount == 10) {
+			state += 1;
+			seqCount = 0;
+		}
+
+		++seqCount;
+
+		if (state == 5) state = 0;
+
+		break;
+	case 2:
+		xo = (float(64) + state * 16) / IMG_WIDTH_BOSS1;
+		xf = (float(82) + state * 16) / IMG_WIDTH_BOSS1;
+
+		yo = float(47) / IMG_HEIGHT_BOSS1;
+		yf = float(57) / IMG_HEIGHT_BOSS1;
+
+		if (seqCount == 10) {
+			state += 1;
+			seqCount = 0;
+		}
+
+		++seqCount;
+
+		if (state == 5) state = 0;
+
+		break;
+	case 3:
+		xo = (float(0) + state * 36) / IMG_WIDTH_BOSS1;
+		xf = (float(36) + state * 36) / IMG_WIDTH_BOSS1;
+
+		yo = float(55) / IMG_HEIGHT_BOSS1;
+		yf = float(79) / IMG_HEIGHT_BOSS1;
+
+		if (seqCount == 10) {
+			state += 1;
+			seqCount = 0;
+		}
+
+		++seqCount;
+
+		if (state == 5) state = 0;
+
+		break;
+	case 4:
+		xo = (float(63) + state * 16) / IMG_WIDTH_BOSS1;
+		xf = (float(82) + state * 16) / IMG_WIDTH_BOSS1;
+
+		yo = float(104) / IMG_HEIGHT_BOSS1;
+		yf = float(113) / IMG_HEIGHT_BOSS1;
+
+		if (seqCount == 10) {
+			state += 1;
+			seqCount = 0;
+		}
+
+		++seqCount;
+
+		if (state == 5) state = 0;
+
+		break;
+
+
+	}
+
+
+
+	screen_x = posx;
+	screen_y = posy;
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+	glBegin(GL_QUADS);
+	glTexCoord2f(xo, yf);	glVertex2i(screen_x, screen_y);
+	glTexCoord2f(xo, yo);	glVertex2i(screen_x, screen_y + h);
+	glTexCoord2f(xf, yo);	glVertex2i(screen_x + w, screen_y + h);
+	glTexCoord2f(xf, yf);	glVertex2i(screen_x + w, screen_y);
+
+
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+
+
 void cProjectilEnemic::DrawRectBoss2(int tex_id)
 {
 	//x + WIDTH PLAYER
@@ -151,8 +254,8 @@ void cProjectilEnemic::DrawRectBoss2(int tex_id)
 
 	int screen_x, screen_y;
 
-	float xo = (float(0) + state*162) / IMG_WIDTH_BOSS2;
-	float xf = (float(162) + state*162)/ IMG_WIDTH_BOSS2;
+	float xo = (float(0) + state * 162) / IMG_WIDTH_BOSS2;
+	float xf = (float(162) + state * 162) / IMG_WIDTH_BOSS2;
 
 	float yo = float(14) / IMG_HEIGHT_BOSS2;
 	float yf = float(68) / IMG_HEIGHT_BOSS2;
@@ -202,7 +305,7 @@ bool cProjectilEnemic::isCollision(int(*map)[SCENE_HEIGHT][SCENE_WIDTH]) {
 	if (height_tiles == 0) height_tiles = 1;
 
 
-	for (j = 0; j<height_tiles; j++)
+	for (j = 0; j < height_tiles; j++)
 	{
 		if ((*map)[tile_y + j][tile_x] != 0)	return true;
 	}

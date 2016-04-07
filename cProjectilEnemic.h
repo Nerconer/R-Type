@@ -21,6 +21,9 @@
 #define IMG_WIDTH_BOSS2 495
 #define IMG_HEIGHT_BOSS2 131
 
+#define IMG_WIDTH_BOSS1 146
+#define IMG_HEIGHT_BOSS1 113
+
 
 class cProjectilEnemic
 {
@@ -44,6 +47,8 @@ public:
 	void setPosition(int x, int y);
 
 	void DrawRect(int tex_id);
+
+	void DrawRectBoss1(int tex_id);
 
 	void DrawRectBoss2(int tex_id);
 
