@@ -201,8 +201,6 @@ bool cGame::Loop()
 		if(res) {
 			if(level == 0) RenderMenu();
 			else  Render();
-			//else if(level == 2) {}
-			//else Render();
 		}
 
 	}
@@ -404,8 +402,11 @@ void cGame::setExplosion(int j)
 	int x, y;
 	enemies[j].getPosXY(&x, &y);
 
-	for(int k = 0; k < NUM_EXPLOSIONS; k++) {
+	bool found = false;
+
+	for(int k = 0; k < NUM_EXPLOSIONS && !found; k++) {
 		if(!explosions[k].getActive()) {
+			found = true;
 			explosions[k].setActive(true);
 			float offsetX, offsetY;
 			int w, h;
@@ -819,44 +820,53 @@ void cGame::LogicWithBoss()
 						Boss.projectils[i].setActive(false);
 					}
 					else {
-						int xPlayer, yPlayer;
 
+						if (Boss.projectils[i].isCollision(&Scene.map)) {
+							Boss.projectils[i].setActive(false);
 
-						Player.GetPosition(&xPlayer, &yPlayer);
-						
-						int type = Boss.projectils[i].getType();
-						switch (type) {
-						case 1:
-							x -= i % 2 +1;
-							if (i % 2) y -= 1;
-							else y += 1;
-							break;
-						case 2:
-							x -= i % 2 + 1;
-							if (i % 2) y -= 1;
-							else y += 1;
-							break;
-						case 3:
-							x -= 1;
-							if (i % 2) y -= 1;
-							else y += 1;
-							break;
-						case 4:
-							if (yPlayer == (y - h)) x -= 1;
-							else if (yPlayer > (y - h)) {
-								y +=  1;
-								x -= 1;
-							}
-							else {
-								x -= 1;
-								y -= 1;
-							}
-							break;
 						}
-						
-						Boss.projectils[i].setPosition(x, y);
+						else {
+
+							int xPlayer, yPlayer;
 
 
+							Player.GetPosition(&xPlayer, &yPlayer);
+
+							int type = Boss.projectils[i].getType();
+							switch (type) {
+							case 1:
+								x -= i % 2 + 1;
+								if (i % 2) y -= 1;
+								else y += 1;
+								break;
+							case 2:
+								x -= i % 2 + 1;
+								if (i % 2) y -= 1;
+								else y += 1;
+								break;
+							case 3:
+								x -= 1;
+								if (i % 2) y -= 1;
+								else y += 1;
+								break;
+							case 4:
+								if (yPlayer == (y - h)) x -= 1;
+								else if (yPlayer > (y - h)) {
+									y += 1;
+									x -= 1;
+								}
+								else {
+									x -= 1;
+									y -= 1;
+								}
+								break;
+							}
+
+							Boss.projectils[i].setPosition(x, y);
+
+
+
+						}
 					}
 				}
 
