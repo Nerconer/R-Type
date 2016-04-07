@@ -9,7 +9,7 @@ cPlayer::cPlayer() {
 
 	isKilledByRight = false;
 	steps = 0;
-	hurted = true;
+	hurted = 0;
 
 	//STATE_LOOKRIGHT
 	/*p.xo = 3.0f;
@@ -187,14 +187,14 @@ int cPlayer::getLives()
 
 void cPlayer::setLives(int lives)
 {
-	if (this->lives < lives) hurted = true;
+	if (this->lives > lives) hurted = 100;
 	this->lives = lives;
 }
 
-bool cPlayer::getHurted() {
+int cPlayer::getHurted() {
 	return hurted;
 }
-void cPlayer::setHurted(bool hurted) {
+void cPlayer::setHurted(int hurted) {
 	this->hurted = hurted;
 }
 
