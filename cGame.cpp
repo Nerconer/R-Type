@@ -276,7 +276,8 @@ bool cGame::Process()
 	if(x <= Scene.velocitat) {
 		Player.setBackWindow(true);
 	}
-	if (!isVisibleLeft(x)) Player.setLives(0);
+
+	if (!isVisibleLeft(x)) Player.setLives(-1);
 
 	if(Player.getLives() < 0) {
 		// GAME OVER
@@ -383,12 +384,12 @@ bool cGame::Process()
 	}
 	
 	
-	if (level != 2 && Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
+	if (level != 1 && Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
 
 		LogicBeforeBoss();
 	}
 
-	if (level == 2) LogicWithBoss();
+	if (level == 1) LogicWithBoss();
 
 
 	return res;
@@ -635,6 +636,88 @@ void cGame::LogicWithBoss()
 
 	if (level == 1) {
 
+
+		for (int i = 0; i < 5; ++i) {
+
+			int xBoss, yBoss, x, y, w, h;
+			Boss.getPosXY(&xBoss, &yBoss);
+			Boss.getWidthHeight(&w, &h);
+
+			if (!Boss.projectils[i].getActive()) {
+				Boss.getPosXY(&xBoss, &yBoss);
+				Boss.getWidthHeight(&w, &h);
+				Boss.projectils[i].setActive(true);
+				if (i % 2 == 0) Boss.projectils[i].setPosition(xBoss + 30, yBoss + h - 110);
+				else Boss.projectils[i].setPosition(xBoss + 100, yBoss + h/2 - 20);
+				Boss.projectils[i].setDimensions(40, 20);
+
+				int type;
+				if (i < 4) type = i + 1;
+				else type = (1 + (rand() % (int)(i - 1 + 1)));
+				Boss.projectils[i].setType(type);
+
+				switch (type) {
+				case 1:
+					Boss.projectils[i].setDimensions(80, 40);
+					break;
+				case 2:
+					Boss.projectils[i].setDimensions(30, 15);
+					break;
+				case 3:
+					Boss.projectils[i].setDimensions(80, 40);
+					break;
+				case 4:
+					Boss.projectils[i].setDimensions(30, 15);
+					break;
+				}
+
+			}
+			else {
+
+
+				Boss.projectils[i].getPosition(&x, &y);
+				if (!isVisibleLeft(x)) Boss.projectils[i].setActive(false);
+				else {
+					Boss.projectils[i].GetArea(&cRect);
+					if (Player.Collides(&cRect)) {
+						Player.setLives(Player.getLives() - 1);
+						Boss.projectils[i].setActive(false);
+					}
+					else {
+						int xPlayer, yPlayer;
+
+
+						Player.GetPosition(&xPlayer, &yPlayer);
+
+						int type = Boss.projectils[i].getType();
+						switch (type) {
+						case 1:
+							y -= 1;
+							x -= 1;
+							break;
+						case 2:
+							x -= 3;
+							break;
+						case 3:
+							x -= 1;
+							y -= 1;
+							break;
+						case 4:
+							x -= 3;
+							break;
+							
+						}
+
+						Boss.projectils[i].setPosition(x, y);
+
+
+					}
+				}
+
+			}
+
+		}
+
 	}
 
 	else {
@@ -851,7 +934,14 @@ void cGame::RenderEnemies(int id1, int id2, int id3)
 	Boss.getPosXY(&x, &y);
 	// DESCOMENTAR (TESTING)
 	//if(this->isVisible(x)) {
-		if(level == 1) Boss.Draw1(Data.GetID(IMG_BOSS1));
+	if (level == 1) {
+		Boss.Draw1(Data.GetID(IMG_BOSS1));
+		for (int i = 0; i < 5; ++i) {
+			if (Boss.projectils[i].getActive()) {
+				Boss.projectils[i].DrawRectBoss1(Data.GetID(IMG_MISSILES_BOSS));
+			}
+		}
+	}
 		else if (level == 2) {
 			Boss.Draw1(Data.GetID(IMG_BOSS2));
 			for (int i = 0; i < 5; ++i) {
@@ -1432,6 +1522,8 @@ bool cGame::generateEnemies(int level)
 
 	if(level == 1)
 		fd=fopen("txt/enemiesLVL1.txt","r");
+		res = res = Data.LoadImage(IMG_MISSILES_BOSS, "img/enemies/projectilsBoss1.png", GL_RGBA);
+		if (!res) return false;
 	else if (level == 2)
 	{
 		fd = fopen("txt/enemiesLVL2.txt", "r");
@@ -1455,7 +1547,7 @@ bool cGame::generateEnemies(int level)
 			if(level == 1) {
 				Boss.setLife(LIFE_BOSS_1);
 				Boss.setType1(1);
-
+				Boss.projectils = vector<cProjectilEnemic>(5);
 				Boss.setWidthHeight(162*1.7, 206*1.7);
 			}
 			else if(level == 2) {
