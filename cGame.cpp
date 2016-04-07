@@ -647,7 +647,9 @@ void cGame::LogicWithBoss()
 				Boss.getPosXY(&xBoss, &yBoss);
 				Boss.getWidthHeight(&w, &h);
 				Boss.projectils[i].setActive(true);
-				if (i % 2 == 0) Boss.projectils[i].setPosition(xBoss + 30, yBoss + h - 110);
+				// BOCA
+				if (i % 2 == 0) Boss.projectils[i].setPosition(xBoss + 30, yBoss + h - 120);
+				// CENTRO
 				else Boss.projectils[i].setPosition(xBoss + 100, yBoss + h/2 - 20);
 				Boss.projectils[i].setDimensions(40, 20);
 
@@ -684,33 +686,61 @@ void cGame::LogicWithBoss()
 						Boss.projectils[i].setActive(false);
 					}
 					else {
-						int xPlayer, yPlayer;
 
-
-						Player.GetPosition(&xPlayer, &yPlayer);
-
-						int type = Boss.projectils[i].getType();
-						switch (type) {
-						case 1:
-							y -= 1;
-							x -= 1;
-							break;
-						case 2:
-							x -= 3;
-							break;
-						case 3:
-							x -= 1;
-							y -= 1;
-							break;
-						case 4:
-							x -= 3;
-							break;
-							
+						if (Boss.projectils[i].isCollision(&Scene.map)) {
+							Boss.projectils[i].setActive(false);
 						}
+						else {
+							int xPlayer, yPlayer;
 
-						Boss.projectils[i].setPosition(x, y);
 
+							Player.GetPosition(&xPlayer, &yPlayer);
 
+							int type = Boss.projectils[i].getType();
+							switch (type) {
+							case 1:
+
+								if (yPlayer == y) {
+									x -= 1;
+								}
+								else {
+									if (y >= GAME_HEIGHT - 64) {
+										y += 1;
+									}
+									else {
+										y -= 1;
+										x -= 1;
+									}
+								}
+
+								break;
+							case 2:
+								x -= 3;
+								break;
+							case 3:
+								if (yPlayer == y) {
+									x -= 1;
+								}
+								else {
+									if (y <= 70) {
+										y -= 1;
+									}
+									else {
+										x -= 1;
+									}
+								}
+
+								break;
+							case 4:
+
+								x -= 3;
+								break;
+
+							}
+
+							Boss.projectils[i].setPosition(x, y);
+
+						}
 					}
 				}
 

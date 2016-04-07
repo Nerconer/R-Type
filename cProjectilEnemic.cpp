@@ -172,7 +172,7 @@ void cProjectilEnemic::DrawRectBoss1(int tex_id)
 		xo = (float(64) + state * 16) / IMG_WIDTH_BOSS1;
 		xf = (float(82) + state * 16) / IMG_WIDTH_BOSS1;
 
-		yo = float(47) / IMG_HEIGHT_BOSS1;
+		yo = float(48) / IMG_HEIGHT_BOSS1;
 		yf = float(57) / IMG_HEIGHT_BOSS1;
 
 		if (seqCount == 10) {
@@ -189,7 +189,7 @@ void cProjectilEnemic::DrawRectBoss1(int tex_id)
 		xo = (float(0) + state * 36) / IMG_WIDTH_BOSS1;
 		xf = (float(36) + state * 36) / IMG_WIDTH_BOSS1;
 
-		yo = float(55) / IMG_HEIGHT_BOSS1;
+		yo = float(58) / IMG_HEIGHT_BOSS1;
 		yf = float(79) / IMG_HEIGHT_BOSS1;
 
 		if (seqCount == 10) {
