@@ -1,8 +1,8 @@
 #pragma once
 #include "cEnemy.h"
 
-#define LIFE_BOSS_1 20000
-#define LIFE_BOSS_2 50000
+#define LIFE_BOSS_1 5000
+#define LIFE_BOSS_2 10000
 
 #define IMG_WIDTH_BOSS1 669
 #define IMG_HEIGHT_BOSS1 2085

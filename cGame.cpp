@@ -879,16 +879,16 @@ void printString(void* font, const char* string)
 
 void cGame::RenderGUI()
 {
-	int id = Data.GetID(IMG_PLAYER);
+	int id = Data.GetID(IMG_MISSILE);
 	int w, h;
 	posTexture p;
 	int screen_x, screen_y;
 	int text_y;
 
-	p.xo = 166.0f / IMG_WIDTH_PLAYER;
-	p.yo = 1.0f / IMG_HEIGHT_PLAYER;
-	p.xf = 199.0f / IMG_WIDTH_PLAYER;
-	p.yf = 16.0f / IMG_HEIGHT_PLAYER;
+	p.xo = 166.0f / 532;
+	p.yo = 1.0f / 372;
+	p.xf = 199.0f / 532;
+	p.yf = 16.0f / 372;
 
 	Player.GetWidthHeight(&w, &h);
 	screen_x = 25;
@@ -1142,8 +1142,8 @@ bool cGame::ProcessMenu()
 				keys[KEY_INTRO] = false;
 				switch(Menu.getSO()){
 					case 0:	// Play
-						Menu.setTypeMenu(MENU_SELECT_LEVEL);
-						Menu.setSO(0);	
+						Menu.setSO(0);
+						Menu.setTypeMenu(MENU_SELECT_LEVEL);	
 						Menu.setNumOptions(3);	// Lvl1, Lvl2, Back
 						break;
 					case 1:	// Instructions
@@ -1187,7 +1187,7 @@ bool cGame::ProcessMenu()
 			}
 			break;
 		
-		case MENU_SELECT_LEVEL:
+		case MENU_SELECT_LEVEL:	
 			//Menu.setNumOptions(3);
 			if(keys[GLUT_KEY_UP]) {
 				Menu.descreaseSO();
@@ -1204,15 +1204,17 @@ bool cGame::ProcessMenu()
 						/*this->level = 1;
 						mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 						Init();*/
-						Menu.setTypeMenu(MENU_SELECT_SHIP);
 						preSelectedLevel = 1;
+						Menu.setTypeMenu(MENU_SELECT_SHIP);
+						Menu.setSO(0);
 						break;
 					case 1:	// Level 2
 						//mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 						//this->level = 2;
 						//Init();
-						Menu.setTypeMenu(MENU_SELECT_SHIP);
 						preSelectedLevel = 2;
+						Menu.setTypeMenu(MENU_SELECT_SHIP);
+						Menu.setSO(0);
 						break;
 					case 2:	// Back
 						Menu.setTypeMenu(MENU_PRINCIPAL);
@@ -1223,6 +1225,7 @@ bool cGame::ProcessMenu()
 			break;
 
 			case MENU_SELECT_SHIP:
+				Menu.setNumOptions(6);
 				if(keys[GLUT_KEY_LEFT]) {
 					Menu.descreaseSO();
 					keys[GLUT_KEY_LEFT] = false;
@@ -1234,69 +1237,62 @@ bool cGame::ProcessMenu()
 				else if(keys[KEY_INTRO]) {
 					keys[KEY_INTRO] = false;
 					switch(Menu.getSO()){
-						//Menu.setSO(0);	
-						//Menu.setNumOptions(5);
 						case 0:
-							//this->level = ;
-							//Player.setNauSelected(0);
+							this->level = this->preSelectedLevel;
+							Player.setNauSelected(0);
+							mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 							if(this->level == 1) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							else if(this->level == 2) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							break;
 
 						case 1:
 							this->level = this->preSelectedLevel;
-							//Player.setNauSelected(1);
+							Player.setNauSelected(1);
+							mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 							if(this->level == 1) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							else if(this->level == 2) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							break;
 
 						case 2:
 							this->level = preSelectedLevel;
-							//Player.setNauSelected(2);
+							Player.setNauSelected(2);
+							mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 							if(this->level == 1) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							else if(this->level == 2) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							break;
 
 						case 3:
 							this->level = preSelectedLevel;
-							//Player.setNauSelected(3);
+							Player.setNauSelected(4);
+							mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 							if(this->level == 1) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							else if(this->level == 2) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							break;
 
 						case 4:
 							this->level = preSelectedLevel;
-							//Player.setNauSelected(4);
+							Player.setNauSelected(3);
+							mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 							if(this->level == 1) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							else if(this->level == 2) {
-								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
 								Init();
 							}
 							break;
@@ -1489,11 +1485,12 @@ void cGame::pintaNauMenu(int id, int id1)
 	// NAU
 	posTexture p;
 
-	p.xo = 166.0f / IMG_WIDTH_PLAYER;
-	p.yo = 1.0f / IMG_HEIGHT_PLAYER;
-	p.xf = 199.0f / IMG_WIDTH_PLAYER;
-	p.yf = 16.0f / IMG_HEIGHT_PLAYER;
+	p.xo = 166.0f / 532;
+	p.yo = 1.0f / 372;
+	p.xf = 199.0f / 532;
+	p.yf = 16.0f / 372;
 
+	id = Data.GetID(IMG_MISSILE);
 
 	glLoadIdentity();
 	glEnable(GL_TEXTURE_2D);
@@ -1573,7 +1570,165 @@ void cGame::pintaNauMenu(int id, int id1)
 
 void cGame::selectShip()
 {
+	float posx = -0.62;
+	float posy = -0.02;
+	float posyBack = -0.5;
+	float posx1 = -0.38;
+	char *options[6];
 
+	options[0] = "R-9A";
+	options[1] = "R-9B";
+	options[2] = "R-9C";
+	options[3] = "R-9D";
+	options[4] = "R-9E";
+	options[5] = "Back";
+
+	for(int i = 0; i < sizeof(options)/4; ++i) {
+		glColor4f(0.0, 0.7, 0.7, 1.0);
+		if(i == 5) {
+			posx = -0.1;
+			posy = -0.6;
+			if(Menu.getSO() == i) {
+				glColor4f(1.0, 1.0, 1.0, 1.0);
+				glRasterPos2f(posx-0.06, posy);
+				printString(GLUT_BITMAP_9_BY_15,"< ");
+			}
+			else {
+				glRasterPos2f(posx, posy);
+				glColor4f(0.0, 0.7, 0.7, 1.0);
+			
+			}
+			printString(GLUT_BITMAP_9_BY_15,options[i]);
+			if(Menu.getSO() == i) {
+				printString(GLUT_BITMAP_9_BY_15," >");
+			}
+		}
+		else if(i == 3 || i == 4) {
+			posy = -0.42;
+			if(Menu.getSO() == i) {
+				glColor4f(1.0, 1.0, 1.0, 1.0);
+				glRasterPos2f(posx1-0.06, posy);
+				printString(GLUT_BITMAP_9_BY_15,"< ");
+			}
+			else {
+				glRasterPos2f(posx1, posy);
+				glColor4f(0.0, 0.7, 0.7, 1.0);
+			
+			}
+			printString(GLUT_BITMAP_9_BY_15,options[i]);
+			if(Menu.getSO() == i) {
+				printString(GLUT_BITMAP_9_BY_15," >");
+			}
+			posx1 +=0.51;
+		}
+		else {
+			if(Menu.getSO() == i) {
+				glColor4f(1.0, 1.0, 1.0, 1.0);
+				glRasterPos2f(posx-0.06, posy);
+				printString(GLUT_BITMAP_9_BY_15,"< ");
+			}
+			else {
+				glRasterPos2f(posx, posy);
+				glColor4f(0.0, 0.7, 0.7, 1.0);
+			
+			}
+			printString(GLUT_BITMAP_9_BY_15,options[i]);
+			if(Menu.getSO() == i) {
+				printString(GLUT_BITMAP_9_BY_15," >");
+			}
+			posx +=0.51;
+		}
+	} 
+
+	// NAU
+	posTexture p;
+
+	p.xo = 67.0f / IMG_WIDTH_PLAYER;
+	p.yo = 2.0f / IMG_HEIGHT_PLAYER;
+	p.xf = 99.0f / IMG_WIDTH_PLAYER;
+	p.yf = 19.0f / IMG_HEIGHT_PLAYER;
+
+	int id = Data.GetID(IMG_PLAYER);
+
+	// NAU 0
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf);	glVertex2d(-0.7,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yf);	glVertex2d(-0.4,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yo);	glVertex2d(-0.4,0.12+0.1);
+		glTexCoord2f(p.xo,p.yo);	glVertex2d(-0.7,0.12+0.1);
+	glEnd();
+	glPopMatrix();
+
+	float offset = 17.0f;
+	float offsetParse = offset / IMG_HEIGHT_PLAYER;
+
+	// NAU 1
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf+offsetParse);	glVertex2d(-0.2,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yf+offsetParse);	glVertex2d(0.1,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yo+offsetParse);	glVertex2d(0.1,0.12+0.1);
+		glTexCoord2f(p.xo,p.yo+offsetParse);	glVertex2d(-0.2,0.12+0.1);
+	glEnd();
+	glPopMatrix();
+
+	offset+=17.0f;
+	offsetParse = offset / IMG_HEIGHT_PLAYER;
+
+	// NAU 2
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf+offsetParse);	glVertex2d(0.3,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yf+offsetParse);	glVertex2d(0.6,-0.08+0.1);
+		glTexCoord2f(p.xf,p.yo+offsetParse);	glVertex2d(0.6,0.12+0.1);
+		glTexCoord2f(p.xo,p.yo+offsetParse);	glVertex2d(0.3,0.12+0.1);
+	glEnd();
+	glPopMatrix();
+
+	offset+=17.0f;
+	offsetParse = offset / IMG_HEIGHT_PLAYER;
+
+	// NAU 3
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf+offsetParse);	glVertex2d(0.05,-0.08-0.3);
+		glTexCoord2f(p.xf,p.yf+offsetParse);	glVertex2d(0.35,-0.08-0.3);
+		glTexCoord2f(p.xf,p.yo+offsetParse);	glVertex2d(0.35,0.12-0.3);
+		glTexCoord2f(p.xo,p.yo+offsetParse);	glVertex2d(0.05,0.12-0.3);
+	glEnd();
+	glPopMatrix();
+
+	offset+=17.0f;
+	offsetParse = offset / IMG_HEIGHT_PLAYER;
+
+	// NAU 4
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(p.xo,p.yf+offsetParse);	glVertex2d(-0.45,-0.08-0.3);
+		glTexCoord2f(p.xf,p.yf+offsetParse);	glVertex2d(-0.15,-0.08-0.3);
+		glTexCoord2f(p.xf,p.yo+offsetParse);	glVertex2d(-0.15,0.12-0.3);
+		glTexCoord2f(p.xo,p.yo+offsetParse);	glVertex2d(-0.45,0.12-0.3);
+	glEnd();
+	glPopMatrix();
+
+	
+	
 }
 
 
