@@ -143,9 +143,9 @@ bool cBoss::Collides(cRect *rc)
 		left = x + 100;
 		break;
 	case 2:
-		bottom = y - h;
+		bottom = y;
 		rigth = w + x;
-		top = y;
+		top = y + h;
 		left = x;
 		break;
 
