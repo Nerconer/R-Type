@@ -29,6 +29,8 @@ cGame::cGame(void)
 
 	pause = false;
 	gameOver = false;
+
+	preSelectedLevel = -1;
 }
 
 cGame::~cGame(void)
@@ -259,6 +261,8 @@ void cGame::goMenu()
 	cScene Scene;
 	Scene.velocitat = 0;
 	Scene.velocitatBackground = 0;
+
+	preSelectedLevel = -1;
 }
 
 //Process
@@ -400,7 +404,7 @@ void cGame::setExplosion(int j)
 	int x, y;
 	enemies[j].getPosXY(&x, &y);
 
-	for(int k = 0; k <= NUM_EXPLOSIONS; k++) {
+	for(int k = 0; k < NUM_EXPLOSIONS; k++) {
 		if(!explosions[k].getActive()) {
 			explosions[k].setActive(true);
 			float offsetX, offsetY;
@@ -1194,14 +1198,18 @@ bool cGame::ProcessMenu()
 				keys[KEY_INTRO] = false;
 				switch(Menu.getSO()){
 					case 0:	// Level 1
-						this->level = 1;
+						/*this->level = 1;
 						mciSendString("stop sound/Intro.wav",NULL,0,NULL);
-						Init();
+						Init();*/
+						Menu.setTypeMenu(MENU_SELECT_SHIP);
+						preSelectedLevel = 1;
 						break;
 					case 1:	// Level 2
-						mciSendString("stop sound/Intro.wav",NULL,0,NULL);
-						this->level = 2;
-						Init();
+						//mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+						//this->level = 2;
+						//Init();
+						Menu.setTypeMenu(MENU_SELECT_SHIP);
+						preSelectedLevel = 2;
 						break;
 					case 2:	// Back
 						Menu.setTypeMenu(MENU_PRINCIPAL);
@@ -1210,6 +1218,95 @@ bool cGame::ProcessMenu()
 				}
 			}
 			break;
+
+			case MENU_SELECT_SHIP:
+				if(keys[GLUT_KEY_LEFT]) {
+					Menu.descreaseSO();
+					keys[GLUT_KEY_LEFT] = false;
+				}
+				else if(keys[GLUT_KEY_RIGHT]) {
+					Menu.increaseSO();
+					keys[GLUT_KEY_RIGHT] = false;
+				}
+				else if(keys[KEY_INTRO]) {
+					keys[KEY_INTRO] = false;
+					switch(Menu.getSO()){
+						//Menu.setSO(0);	
+						//Menu.setNumOptions(5);
+						case 0:
+							//this->level = ;
+							//Player.setNauSelected(0);
+							if(this->level == 1) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							else if(this->level == 2) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							break;
+
+						case 1:
+							this->level = this->preSelectedLevel;
+							//Player.setNauSelected(1);
+							if(this->level == 1) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							else if(this->level == 2) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							break;
+
+						case 2:
+							this->level = preSelectedLevel;
+							//Player.setNauSelected(2);
+							if(this->level == 1) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							else if(this->level == 2) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							break;
+
+						case 3:
+							this->level = preSelectedLevel;
+							//Player.setNauSelected(3);
+							if(this->level == 1) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							else if(this->level == 2) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							break;
+
+						case 4:
+							this->level = preSelectedLevel;
+							//Player.setNauSelected(4);
+							if(this->level == 1) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							else if(this->level == 2) {
+								mciSendString("stop sound/Intro.wav",NULL,0,NULL);
+								Init();
+							}
+							break;
+
+						case 5:	// Back
+							Menu.setTypeMenu(MENU_SELECT_LEVEL);
+							Menu.setSO(0);
+							preSelectedLevel = -1;
+							break;
+
+					}	
+				}
+				break;
 	}
 	return res;
 }
@@ -1272,15 +1369,19 @@ void cGame::printOptions()
 
 void printInstructions()
 {
-	char *explanation[4];
+	char *explanation[8];
 	float posx = -0.66;
-	float posy = 0.2;
+	float posy = 0.3;
 	float posyBack = -0.5;
 
-	explanation[0] = "A -> Shot";
-	explanation[1] = "Hold 'A' button in order to get a stronger shot.";
-	explanation[2] = "Use the cursor in order to move the spacecraft.";
-	explanation[3] = "Have fun annihilating all enemies!";
+	explanation[0] = "Instructions:";
+	explanation[1] = "";
+	explanation[2] = "A -> Shot";
+	explanation[3] = "ESC -> Pause";
+	explanation[4] = "Don't collide with anything or you will lose a life!";
+	explanation[5] = "Hold 'A' button in order to get a stronger shot.";
+	explanation[6] = "Use the cursor to move the spacecraft.";
+	explanation[7] = "Have fun annihilating all enemies!";
 
 	glColor4f(0.0, 0.7, 0.7, 1.0);
 
@@ -1291,7 +1392,7 @@ void printInstructions()
 	}
 
 	glColor4f(1.0, 1.0, 1.0, 1.0);
-	glRasterPos2f(posx, posyBack);
+	glRasterPos2f(posx, posyBack-0.1);
 	printString(GLUT_BITMAP_9_BY_15,"<Back>");
 }
 
@@ -1467,6 +1568,11 @@ void cGame::pintaNauMenu(int id, int id1)
 	}
 }
 
+void cGame::selectShip()
+{
+
+}
+
 
 void cGame::RenderMenu()
 {
@@ -1517,8 +1623,11 @@ void cGame::RenderMenu()
 					printCredits();
 					break;
 				case MENU_SELECT_LEVEL:
-					Player.setLives(3);
 					selectLevel();
+					break;
+				case MENU_SELECT_SHIP:
+					Player.setLives(3);
+					selectShip();
 					break;
 			}
 		}

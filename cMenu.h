@@ -5,6 +5,7 @@
 #define MENU_INSTR 2
 #define MENU_CR 3
 #define MENU_SELECT_LEVEL 4
+#define MENU_SELECT_SHIP 5
 
 
 class cMenu

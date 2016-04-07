@@ -94,6 +94,8 @@ public:
 
 	void setExplosion(int j);	// position enemies vector
 
+	void selectShip();
+
 	cPlayer getPlayer();
 
 private:
@@ -138,4 +140,6 @@ private:
 	bool pause;
 
 	bool gameOver;
+
+	int preSelectedLevel;
 };
