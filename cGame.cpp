@@ -295,7 +295,7 @@ bool cGame::Process()
 			return true;		
 		}
 	}
-	if(Boss.getLife() <= 0) {
+	else if(Boss.getLife() <= 0) {
 		// WIN
 		//res = PlaySound(TEXT("sound/win.wav"),NULL,SND_LOOP |SND_ASYNC);
 		//if (res == false) return res;
@@ -309,92 +309,92 @@ bool cGame::Process()
 		if(keys[KEY_INTRO]) {
 			PlaySound(NULL,NULL,0);
 			mciSendString("close all", NULL, 0, NULL);
-
-			this->level = 0;
+			goMenu();
 			return true;
 		}
 	}
-
-	//Avancem jugador
-	Player.Advance();
+	else {
+		//Avancem jugador
+		Player.Advance();
 
 
 	
-	bool isAdvanced = false;
-	bool isRight = false;
-	if (keys[GLUT_KEY_UP])			isAdvanced = Player.MoveUp(&Scene.map);
-	else if (keys[GLUT_KEY_LEFT])	isAdvanced = Player.MoveLeft(&Scene.map);
-	else if (keys[GLUT_KEY_RIGHT]) {
-		isAdvanced = Player.MoveRight(&Scene.map);
-		isRight = true;
-		Player.setIsKilledByRight(true);
-	}
-	else if (keys[GLUT_KEY_DOWN])   isAdvanced = Player.MoveDown(&Scene.map);
-	else {
-		Player.Stop();
+		bool isAdvanced = false;
+		bool isRight = false;
+		if (keys[GLUT_KEY_UP])			isAdvanced = Player.MoveUp(&Scene.map);
+		else if (keys[GLUT_KEY_LEFT])	isAdvanced = Player.MoveLeft(&Scene.map);
+		else if (keys[GLUT_KEY_RIGHT]) {
+			isAdvanced = Player.MoveRight(&Scene.map);
+			isRight = true;
+			Player.setIsKilledByRight(true);
+		}
+		else if (keys[GLUT_KEY_DOWN])   isAdvanced = Player.MoveDown(&Scene.map);
+		else {
+			Player.Stop();
 
 			
-	}
-
-	//Si ha xocat es resta una vida
-
-	if (isAdvanced && (((glutGet(GLUT_ELAPSED_TIME) - lastArrowTime) > DELAY_LIVE) || lastArrowTime == 0)) {
-
-		Player.setLives(Player.getLives() - 1);
-
-		lastArrowTime = glutGet(GLUT_ELAPSED_TIME);
-		//Evita que el Player.Advance es mengi dos vidas
-		if (!isRight && !Player.getIsKilledByRight()) Player.setIsKilledByRight(false);
-	}
-
-	if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
-		int x,y;
-		Player.GetPosition(&x,&y);
-		startTimeProj = glutGet(GLUT_ELAPSED_TIME);
-		ActivateProjectil(x,y,0);
-		Player.Shoot(0);
-	}
-
-	if(keys[KEY_A_MAJ] || keys[KEY_A_MIN]) {
-		if(!buttonA) {
-			buttonA = true;
-			timeButtonAInitial = glutGet(GLUT_ELAPSED_TIME);
 		}
-		else {
-			timeButtonAFinal = glutGet(GLUT_ELAPSED_TIME);
+
+		//Si ha xocat es resta una vida
+
+		if (isAdvanced && (((glutGet(GLUT_ELAPSED_TIME) - lastArrowTime) > DELAY_LIVE) || lastArrowTime == 0)) {
+
+			Player.setLives(Player.getLives() - 1);
+
+			lastArrowTime = glutGet(GLUT_ELAPSED_TIME);
+			//Evita que el Player.Advance es mengi dos vidas
+			if (!isRight && !Player.getIsKilledByRight()) Player.setIsKilledByRight(false);
 		}
-	}
-	else {	// no apretat
-		if(buttonA) {
-			buttonA = false;
+
+		if (keys[KEY_SPACE] && (glutGet(GLUT_ELAPSED_TIME) - startTimeProj) > DELAY_PROJ) {
 			int x,y;
-			int diff = timeButtonAFinal - timeButtonAInitial;
 			Player.GetPosition(&x,&y);
-			if(diff > 0 && diff < TIME_MEDIUM_SHOT) {
-				ActivateProjectil(x,y,0);
-				Player.Shoot(0);
+			startTimeProj = glutGet(GLUT_ELAPSED_TIME);
+			ActivateProjectil(x,y,0);
+			Player.Shoot(0);
+		}
+
+		if(keys[KEY_A_MAJ] || keys[KEY_A_MIN]) {
+			if(!buttonA) {
+				buttonA = true;
+				timeButtonAInitial = glutGet(GLUT_ELAPSED_TIME);
 			}
-			else if(diff > TIME_MEDIUM_SHOT && diff < TIME_STRONG_SHOT) { // atac semi fort
-				ActivateProjectil(x,y,1);
-				Player.Shoot(1);
-			}
-			else if(diff >= TIME_STRONG_SHOT) {	// atac fort
-				ActivateProjectil(x,y,2);
-				Player.Shoot(2);
+			else {
+				timeButtonAFinal = glutGet(GLUT_ELAPSED_TIME);
 			}
 		}
-	}
+		else {	// no apretat
+			if(buttonA) {
+				buttonA = false;
+				int x,y;
+				int diff = timeButtonAFinal - timeButtonAInitial;
+				Player.GetPosition(&x,&y);
+				if(diff > 0 && diff < TIME_MEDIUM_SHOT) {
+					ActivateProjectil(x,y,0);
+					Player.Shoot(0);
+				}
+				else if(diff > TIME_MEDIUM_SHOT && diff < TIME_STRONG_SHOT) { // atac semi fort
+					ActivateProjectil(x,y,1);
+					Player.Shoot(1);
+				}
+				else if(diff >= TIME_STRONG_SHOT) {	// atac fort
+					ActivateProjectil(x,y,2);
+					Player.Shoot(2);
+				}
+			}
+		}
 	
 	
-	if (Scene.velocitat < SCENE_WIDTH*TILE_SIZE - GAME_WIDTH) {
+		if (Scene.velocitat < SCENE_WIDTH*TILE_SIZE - GAME_WIDTH) {
 
-		LogicBeforeBoss();
+			LogicBeforeBoss();
+		}
+
+		else LogicWithBoss();
+
+
+		return res;
 	}
-
-	else LogicWithBoss();
-
-
-	return res;
 }
 
 void cGame::setExplosion(int j)
