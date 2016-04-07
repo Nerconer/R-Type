@@ -179,7 +179,7 @@ void cScene::Draw(int tex_id)
 void cScene::DrawBackground(int tex_id)
 
 {
-	if (!velocitatBackground) velocitat = 0;
+	if (!velocitatBackground) velocitatBackground = 0;
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 	glTranslatef(-velocitatBackground, 0, 0);

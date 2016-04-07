@@ -384,7 +384,7 @@ bool cGame::Process()
 	}
 	
 	
-	if (Scene.velocitat != SCENE_WIDTH*TILE_SIZE - GAME_WIDTH/2) {
+	if (Scene.velocitat < SCENE_WIDTH*TILE_SIZE - GAME_WIDTH) {
 
 		LogicBeforeBoss();
 	}
@@ -525,7 +525,9 @@ void cGame::LogicBeforeBoss()
 
 									if (yPlayer <= y && yM <= y) {
 
-										xM -= j + 1;
+										xM -= j + 2;
+										if (j % 2 == 0) yM -= 1;
+										
 
 		
 									}
