@@ -526,7 +526,7 @@ void cGame::LogicBeforeBoss()
 									if (yPlayer <= y && yM <= y) {
 
 										xM -= j + 2;
-										if (j % 2 == 0) yM -= 1;
+										if (j % 2 != 0) yM -= 1;
 										
 
 		
