@@ -402,8 +402,11 @@ void cGame::setExplosion(int j)
 	int x, y;
 	enemies[j].getPosXY(&x, &y);
 
-	for(int k = 0; k < NUM_EXPLOSIONS; k++) {
+	bool found = false;
+
+	for(int k = 0; k < NUM_EXPLOSIONS && !found; k++) {
 		if(!explosions[k].getActive()) {
+			found = true;
 			explosions[k].setActive(true);
 			float offsetX, offsetY;
 			int w, h;
