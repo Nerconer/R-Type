@@ -17,6 +17,9 @@
 
 #define VELOCITAT_PLAYER	1
 
+#define NUM_NAUS 5
+#define NUM_STATES 5
+
 class cRect
 {
 public:
@@ -70,7 +73,7 @@ protected:
 
 	int seq,delay;
 
-	vector<posTexture> textSeq;
+	posTexture textSeq[NUM_NAUS][NUM_STATES];
 
 	bool stopUp, stopDown;
 };

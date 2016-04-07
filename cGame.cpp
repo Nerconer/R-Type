@@ -70,7 +70,7 @@ bool cGame::Init()
 		if (!res) return false;
 
 		//Player initialization
-		res = Data.LoadImage(IMG_PLAYER,"img/nau-alpha.png",GL_RGBA);
+		res = Data.LoadImage(IMG_PLAYER,"img/naus.png",GL_RGBA);
 		if(!res) return false;
 
 		res = Data.LoadImage(IMG_PLAYER1,"img/nau-alpha2.png",GL_RGBA);
@@ -1070,9 +1070,12 @@ void cGame::Render()
 			}
 
 			RenderEnemies(Data.GetID(IMG_ENEMY1), Data.GetID(IMG_ENEMY2), Data.GetID(IMG_ENEMY3));
-			//if (Player.getHurted())
-				Player.Draw(Data.GetID(IMG_PLAYER));
-			//else Player.setHurted(false);
+			if (Player.getHurted() != 0) {
+				if (Player.getHurted() % 3 == 0)
+					Player.Draw(Data.GetID(IMG_PLAYER));
+				Player.setHurted(Player.getHurted() - 1);
+			}
+			else Player.Draw(Data.GetID(IMG_PLAYER));
 			RenderProjectils(Data.GetID(IMG_MISSILE));
 			
 			RenderExplosions(Data.GetID(IMG_EXPLOSIONS1));
