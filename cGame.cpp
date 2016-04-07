@@ -393,8 +393,10 @@ bool cGame::Process()
 		else LogicWithBoss();
 
 
-		return res;
+		
 	}
+
+	return res;
 }
 
 void cGame::setExplosion(int j)
